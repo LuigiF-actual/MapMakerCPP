@@ -1,7 +1,7 @@
 ﻿# CMakeList.txt : CMake project for MapMakerC++, include source and define
 # project specific logic here.
 #
-cmake_minimum_required (VERSION 3.10)
+cmake_minimum_required (VERSION 3.30.0)
 
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
@@ -9,13 +9,40 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("MapMakerC++")
+project("MapMakerC++" LANGUAGES CXX)
 
 # Add source to this project's executable.
-add_executable (MapMakerC++ "MapMakerC++.cpp" "MapMakerC++.h")
+add_executable(MapMakerC++ 
+"source/main.cpp"
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET MapMakerC++ PROPERTY CXX_STANDARD 20)
 endif()
 
 # TODO: Add tests and install targets if needed.
+include(FetchContent)
+
+set(CMAKE_TLS_VERIFY OFF)
+set(FETCHCONTENT_QUIET FALSE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
+set(BUILD_GAMES    OFF CACHE BOOL "" FORCE) # don't build the supplied example games
+
+FetchContent_Declare(
+    raylib
+    URL "https://github.com/raysan5/raylib/archive/refs/tags/6.0.tar.gz"
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+
+FetchContent_MakeAvailable(raylib)
+file(REMOVE_RECURSE ${raylib_SOURCE_DIR}/examples)
+file(REMOVE_RECURSE ${raylib_SOURCE_DIR}/projects)
+
+target_link_libraries(MapMakerC++
+    raylib
+)
+
+target_include_directories(MapMakerC++ PUBLIC "include")
+target_include_directories(MapMakerC++ PUBLIC "images")
+
+add_definitions(-DRESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/images/")
