@@ -7,33 +7,69 @@
 #include <TileGrid.hpp>
 #include <PaintBrush.hpp>
 #include <TexturePalette.hpp>
+#include <Config.hpp>
+#include <FileExplorer.hpp>
+#include <string>
+
+
+void moveCamera(Camera2D& camera);
 
 int main(void)
 {
-    const int screenWidth = 1400;
-    const int screenHeight = 1000;
 
-    InitWindow(screenWidth, screenHeight, "MapMakerC++");
+    InitWindow(Config::screenWidth, Config::screenHeight , "MapMakerC++");
 
-    SetTargetFPS(60);         
+    SetWindowState(FLAG_WINDOW_RESIZABLE);
 
     const Texture2D* mytex = &AtlasManager::getInstance().getFirstTexture();
-    std::cout << mytex->width << "  _____  " << mytex->height << "\n";
 
+    Camera2D worldCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
+    
+    
     TexturePalette palette(mytex);
-    TileGrid worldGrid(30, 30, 100.0f, { 0.0f, 0.0f });
+
+    Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, GetScreenWidth(), GetScreenHeight()};
+    Camera2D paletteCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
+    paletteCam.zoom = 1.0f;
+
+    TileGrid worldGrid(100, 100, 64.0f, { -100.0f, -100.0f });
     TileRenderer renderer;
+
+    PaintBrush paintBrush(worldGrid, palette,paletteCam);
+
 
     while (!WindowShouldClose())   
     {
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
+        
 
-        renderer.draw(worldGrid);
+        BeginMode2D(worldCam);
 
-        palette.draw();
+        renderer.draw(worldGrid,worldCam);
+
+        EndMode2D();
+
+        DrawRectangleRec(palette.getBackground().body, palette.getBackground().color);
+
+        BeginScissorMode((int)palette.getPosition().x, (int)palette.getPosition().y, (int)GetScreenWidth(), (int)GetScreenHeight() - (int)palette.getPosition().y);
+
+        BeginMode2D(paletteCam);
+
+        palette.update();
+
         renderer.drawRecLines(palette.getGrid());
+
+        EndMode2D();
+
+        EndScissorMode();
+
+        paintBrush.update();
+        
+        DrawText(std::to_string(GetFPS()).c_str(), 0.0f, 0.0f, 35, PINK);
+
+        moveCamera(paletteCam);
 
         EndDrawing();
     }
@@ -41,4 +77,34 @@ int main(void)
     CloseWindow();       
 
     return 0;
+}
+
+void moveCamera(Camera2D& camera)
+{
+    if (IsKeyDown(KEY_W))
+    {
+        camera.target.y -= 250.0f * GetFrameTime();
+    }
+    if (IsKeyDown(KEY_S))
+    {
+        camera.target.y += 250.0f * GetFrameTime();
+    }
+    if (IsKeyDown(KEY_D))
+    {
+        camera.target.x += 250.0f * GetFrameTime();
+    }
+    if (IsKeyDown(KEY_A))
+    {
+        camera.target.x -= 250.0f * GetFrameTime();
+    }
+    if (IsKeyPressed(KEY_E))
+    {
+        camera.zoom += 0.1f;
+        std::cout << camera.zoom << "\n";
+    }
+    if (IsKeyPressed(KEY_Q))
+    {
+        camera.zoom -= 0.1f;
+        std::cout << camera.zoom << "\n";
+    }
 }

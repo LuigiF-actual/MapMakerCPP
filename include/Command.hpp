@@ -20,10 +20,12 @@ public:
 class PaintTileCmd : public Command
 {
 public:
-	PaintTileCmd(Tile& tile,const Texture2D* newTexture)
+	PaintTileCmd(Tile& tile, Rectangle newSourceRec ,const Texture2D* newTexture)
 		: 
 		mp_ChangedTile(&tile),
 		m_NewTexture(newTexture),
+		m_NewSouceRec(newSourceRec),
+		m_OriginalSourceRec(tile.scRec),
 		m_OriginalTexture(tile.texture)
 	{
 	}
@@ -33,6 +35,7 @@ public:
 		if (mp_ChangedTile)
 		{
 			mp_ChangedTile->texture = m_NewTexture;
+			mp_ChangedTile->scRec = m_NewSouceRec;
 		}
 	}
 
@@ -41,26 +44,34 @@ public:
 		if (mp_ChangedTile)
 		{
 			mp_ChangedTile->texture = m_OriginalTexture;
+			mp_ChangedTile->scRec = m_OriginalSourceRec;
 		}
 	}
 private:
 	const Texture2D* m_OriginalTexture = nullptr;
 	const Texture2D* m_NewTexture = nullptr;
+
+	Rectangle m_NewSouceRec = { 0 };
+	Rectangle m_OriginalSourceRec = { 0 };
+
 	Tile* mp_ChangedTile = nullptr;
 };
 
 class CommandManager
 {
 public:
-	void execute(Tile& tile,const Texture2D* newTexture)
+	void execute(Tile& tile,Rectangle newSourceRec ,const Texture2D* newTexture)
 	{
-		if (tile.texture->id != newTexture->id) 
+		//Checks to see if the tile texture is not the same that it will be aplied, if it is it will not be applied
+		if ( ! ((tile.scRec.x == newSourceRec.x) && (tile.scRec.y == newSourceRec.y) && (newTexture == tile.texture)))
 		{
-			std::unique_ptr<PaintTileCmd> paintCommand = std::make_unique<PaintTileCmd>(tile, newTexture);
+			std::cout << "New command created\n";
+			std::unique_ptr<PaintTileCmd> paintCommand = std::make_unique<PaintTileCmd>(tile, newSourceRec , newTexture);
 
 			paintCommand->execute();
 
 			m_UndoStack.push(std::move(paintCommand));
+
 		}
 	}
 	void undo()

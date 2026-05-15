@@ -6,12 +6,16 @@
 
 #include "TileGrid.hpp"
 #include "Config.hpp"
+#include "FileExplorer.hpp"
+#include "AtlasDictionary.hpp"
 
 struct BackGround
 {
     Color color;
     Rectangle body;
 };
+
+
 
 class TexturePalette
 {
@@ -20,17 +24,36 @@ public:
         :
         m_Texture(texture)
     {
-
+        m_ClickCells.resetScRecs();
     }
 
-    void draw() const
+
+    void update()
     {
-        DrawRectangleRec(m_PaletteBackGround.body, m_PaletteBackGround.color);
+        
         if(m_Texture)
         {
-            DrawTextureEx(*m_Texture, m_AnchorPoint, 0.0f, Config::paletteTextureScale, WHITE);
+            DrawTexture(*m_Texture, m_AnchorPoint.x, m_AnchorPoint.y, WHITE);
         }
+        if (IsKeyPressed(KEY_K))
+        {
+            std::string tempPath = fileExplorer.openExplorer();
+            if (!tempPath.empty())
+            {
+                tempPath = std::filesystem::path(tempPath).stem().string();
+                setTexture(&AtlasManager::getInstance().getTexture(tempPath));
+            }
+        }
+
+        m_AnchorPoint.y = GetScreenHeight() - 380;
+        if (m_AnchorPoint.y != m_PaletteBackGround.body.y)
+        {
+            m_ClickCells.setGidPos(m_AnchorPoint);
+        }
+        m_PaletteBackGround.body.y = m_AnchorPoint.y;
+        m_PaletteBackGround.body.width = GetScreenWidth();
     }
+
 
 
     auto& getTileArr()
@@ -46,19 +69,45 @@ public:
 
     void setTexture(const Texture2D* texture)
     {
+        std::cout << "Texture Set!" << "\n";
         m_Texture = texture;
+        std::cout << "GridSize" << texture->width / 16 << " : : " << texture->height / 16<< "\n";
+
+        m_TextureSize = { (float)m_Texture->width, (float)m_Texture->height };
+        std::cout << "New texture size" << m_TextureSize.x << " : : " << m_TextureSize.y << "\n";
+    }
+
+    const Texture2D& getTexture()
+    {
+        return *m_Texture;
+    }
+
+    Vector2 getPosition()
+    {
+        return m_AnchorPoint;
+    }
+
+    Vector2 getTextureSize()
+    {
+        return { m_TextureSize };
+    }
+
+    BackGround getBackground()
+    {
+        return m_PaletteBackGround;
     }
 
 private:
 
     const Texture2D* m_Texture = nullptr;
 
-    Vector2 m_AnchorPoint = { 0.0f , 500.0f };
+    Vector2 m_AnchorPoint = { 0.0f , 380.0f };
     Vector2 m_TextureSize = { 0, 0 };
 
-    BackGround m_PaletteBackGround = { LIGHTGRAY, { m_AnchorPoint.x, m_AnchorPoint.y, 1400, 500} };
+    BackGround m_PaletteBackGround = { LIGHTGRAY, { m_AnchorPoint.x, m_AnchorPoint.y, Config::screenWidth, Config::screenHeight-m_AnchorPoint.y} };
 
     TileGrid m_ClickCells{ 20, 10, Config::paletteTilesSize ,m_AnchorPoint};
 
+    FileExplorer fileExplorer;
 
 };

@@ -9,7 +9,7 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project("MapMakerC++" LANGUAGES CXX)
+project("MapMakerC++" LANGUAGES C CXX)
 
 # Add source to this project's executable.
 add_executable(MapMakerC++ 
@@ -34,15 +34,40 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
-FetchContent_MakeAvailable(raylib)
+FetchContent_Declare(
+    tinyfiledialogs
+    GIT_REPOSITORY "https://github.com/native-toolkit/libtinyfiledialogs.git"
+    SOURCE_DIR tinyfiledialogs
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+
+FetchContent_MakeAvailable(raylib tinyfiledialogs)
+
 file(REMOVE_RECURSE ${raylib_SOURCE_DIR}/examples)
 file(REMOVE_RECURSE ${raylib_SOURCE_DIR}/projects)
 
+
+add_library(tinyfiledialogs_lib)
+
+target_sources(tinyfiledialogs_lib
+    PRIVATE
+        ${tinyfiledialogs_SOURCE_DIR}/tinyfiledialogs.c
+    
+    PUBLIC
+    FILE_SET HEADERS
+    FILES
+        ${tinyfiledialogs_SOURCE_DIR}/tinyfiledialogs.h
+)
+
 target_link_libraries(MapMakerC++
     raylib
+    tinyfiledialogs_lib
 )
 
 target_include_directories(MapMakerC++ PUBLIC "include")
+target_include_directories(MapMakerC++ PUBLIC ${tinyfiledialogs_SOURCE_DIR})
 target_include_directories(MapMakerC++ PUBLIC "images")
 
-add_definitions(-DRESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/images/")
+target_compile_definitions(MapMakerC++ PRIVATE
+    RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/images/"
+)

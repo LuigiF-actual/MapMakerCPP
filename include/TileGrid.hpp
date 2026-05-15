@@ -6,12 +6,14 @@
 #include <raylib.h>
 
 #include "AtlasDictionary.hpp"
+#include "Config.hpp"
 
 struct Tile
 {
 	const Texture2D* texture;
 	Rectangle body;
 	Rectangle scRec;
+	Color borderColor = BLACK;
 };
 
 class TileGrid
@@ -69,7 +71,35 @@ public:
 		}
 		return nullptr;
 	}
+
+	Vector2 getGridSize()
+	{
+		return Vector2{ (float)m_GridW, (float)m_GridH };
+	}
 	
+	void setGidPos(Vector2 newPos)
+	{
+		for (size_t row = 0; row < m_GridH; row++)
+		{
+			for (size_t column = 0; column < m_GridW; column++)
+			{
+				m_TileGrid[row * m_GridW + column].body.x = column * m_TileSize + newPos.x;
+				m_TileGrid[row * m_GridW + column].body.y = row * m_TileSize + newPos.y;
+			}
+		}
+	}
+
+	void resetScRecs()
+	{
+		for (size_t row = 0; row < m_GridH; row++)
+		{
+			for (size_t column = 0; column < m_GridW; column++)
+			{
+				m_TileGrid[row * m_GridW + column].scRec.x = column * m_TileSize;
+				m_TileGrid[row * m_GridW + column].scRec.y = row * m_TileSize;
+			}
+		}
+	}
 
 private:
 
@@ -77,7 +107,7 @@ private:
 	size_t m_GridW;
 	size_t m_GridH;
 	
-	float m_TileSize = 100;
+	float m_TileSize = 32.0f;
 
 	Vector2 m_GridOffSet;
 
@@ -90,28 +120,43 @@ class TileRenderer
 public:
 	TileRenderer() = default;
 
-	void draw(TileGrid& mp_GridToDraw) const
+	void draw(TileGrid& mp_GridToDraw, Camera2D& camera) const
 	{
-		for (auto& tile : mp_GridToDraw.getArr())
+		Vector2 windowStart = GetScreenToWorld2D(Vector2{ 0,0 }, camera);
+		Vector2 windowEnd = GetScreenToWorld2D(Vector2{ float(GetScreenWidth()), float(GetScreenHeight()) }, camera);
+
+		for (auto y = int(windowStart.y / Config::tileSize); y < int(windowEnd.y / Config::tileSize) + 1; y++)
 		{
-			DrawTexturePro(
-				*tile.texture,
-				tile.scRec,
-				tile.body,
-				{ 0,0 },
-				0.0f,
-				WHITE
-			);
-			DrawRectangleLinesEx(tile.body, 1.0f, BLACK);
+			for (auto x = int(windowStart.x / Config::tileSize); x < int(windowEnd.x / Config::tileSize) + 1; x++)
+			{
+				if ( ! (x < 0 || x >= (int)mp_GridToDraw.getGridSize().x || y < 0 || y >= (int)mp_GridToDraw.getGridSize().y))
+				{
+
+					Tile* tile = mp_GridToDraw.at(x, y);
+					DrawTexturePro(
+						*tile->texture,
+						tile->scRec,
+						tile->body,
+						{ 0,0 },
+						0.0f,
+						WHITE
+					);
+
+				}
+			}
 		}
+
 	}
 
 	void drawRecLines(TileGrid& mp_GridToDraw) const
 	{
 		for (auto& tile : mp_GridToDraw.getArr())
 		{
-			DrawRectangleLinesEx(tile.body, 1.0f, BLACK);
+			DrawRectangleLinesEx(tile.body, 1.0f, tile.borderColor);
 		}
 	}
+
+private:
+
 
 };
