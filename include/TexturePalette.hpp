@@ -45,7 +45,7 @@ public:
             }
         }
 
-        m_AnchorPoint.y = GetScreenHeight() - 380;
+        m_AnchorPoint.y = GetScreenHeight() - 450;
         if (m_AnchorPoint.y != m_PaletteBackGround.body.y)
         {
             m_ClickCells.setGidPos(m_AnchorPoint);
@@ -101,7 +101,7 @@ private:
 
     const Texture2D* m_Texture = nullptr;
 
-    Vector2 m_AnchorPoint = { 0.0f , 380.0f };
+    Vector2 m_AnchorPoint = { 0.0f , 300.0f };
     Vector2 m_TextureSize = { 0, 0 };
 
     BackGround m_PaletteBackGround = { LIGHTGRAY, { m_AnchorPoint.x, m_AnchorPoint.y, Config::screenWidth, Config::screenHeight-m_AnchorPoint.y} };

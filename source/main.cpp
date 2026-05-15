@@ -12,7 +12,7 @@
 #include <string>
 
 
-void moveCamera(Camera2D& camera);
+void moveCamera(Camera2D& camera, Vector2 lockIn);
 
 int main(void)
 {
@@ -69,7 +69,7 @@ int main(void)
         
         DrawText(std::to_string(GetFPS()).c_str(), 0.0f, 0.0f, 35, PINK);
 
-        moveCamera(paletteCam);
+        moveCamera(paletteCam,palette.getPosition());
 
         EndDrawing();
     }
@@ -79,7 +79,7 @@ int main(void)
     return 0;
 }
 
-void moveCamera(Camera2D& camera)
+void moveCamera(Camera2D& camera,Vector2 lockIn)
 {
     if (IsKeyDown(KEY_W))
     {
@@ -99,12 +99,19 @@ void moveCamera(Camera2D& camera)
     }
     if (IsKeyPressed(KEY_E))
     {
-        camera.zoom += 0.1f;
+        camera.zoom += 0.2f;
         std::cout << camera.zoom << "\n";
     }
     if (IsKeyPressed(KEY_Q))
     {
-        camera.zoom -= 0.1f;
+        camera.zoom -= 0.2f;
         std::cout << camera.zoom << "\n";
+    }
+    if (IsKeyPressed(KEY_X))
+    {
+        camera.zoom = 1.0f;
+        camera.target = {0.0f,0.0f};
+        camera.offset = {0.0f,0.0f};
+        std::cout << "locked in" << "\n ";
     }
 }
