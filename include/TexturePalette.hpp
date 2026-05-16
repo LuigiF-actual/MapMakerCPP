@@ -20,9 +20,10 @@ struct BackGround
 class TexturePalette
 {
 public:
-    TexturePalette(const Texture2D* texture)
+    TexturePalette(const Texture2D* texture,Camera2D& camera)
         :
-        m_Texture(texture)
+        m_Texture(texture),
+        m_PaletteCam(camera)
     {
         m_ClickCells.resetScRecs();
     }
@@ -45,13 +46,18 @@ public:
             }
         }
 
-        m_AnchorPoint.y = GetScreenHeight() - (GetScreenHeight() * (30.0f / 100.0f));
-        if (m_AnchorPoint.y != m_PaletteBackGround.body.y)
+        if (IsWindowResized())
         {
-            m_ClickCells.setGidPos(m_AnchorPoint);
+
+            m_AnchorPoint.y = GetScreenHeight() - (GetScreenHeight() * (30.0f / 100.0f));
+            if (m_AnchorPoint.y != m_PaletteBackGround.body.y)
+            {
+                m_ClickCells.setGidPos(m_AnchorPoint);
+            }
+            m_PaletteBackGround.body.y = m_AnchorPoint.y;
+            m_PaletteBackGround.body.width = GetScreenWidth();
+
         }
-        m_PaletteBackGround.body.y = m_AnchorPoint.y;
-        m_PaletteBackGround.body.width = GetScreenWidth();
     }
 
 
@@ -65,6 +71,40 @@ public:
     TileGrid& getGrid()
     {
         return m_ClickCells;
+    }
+
+    Tile* getSelectedCell()
+    {
+        Tile* newSelect = m_ClickCells.findTile(GetScreenToWorld2D(GetMousePosition(), m_PaletteCam));
+
+        if (newSelect)
+        {
+             
+            //Checks to see if the seletected tile is on the texture
+            if ((newSelect->scRec.x > m_Texture->width - Config::paletteTilesSize) || (newSelect->scRec.y > m_Texture->height - Config::paletteTilesSize))
+            {
+
+                std::cout << "Calling break\n";
+                return nullptr;
+            }
+
+        
+            if (!m_selectedCell) 
+            {
+                m_selectedCell = newSelect;
+                m_selectedCell->borderColor = ORANGE;
+            }
+
+            //If the tile color is not orange that means it was not selected thus I change that here   
+            //There can be only ONE orange bordered tile    
+            if (!(m_selectedCell == newSelect))
+            {
+                m_selectedCell->borderColor = BLACK;
+                m_selectedCell = newSelect;
+                m_selectedCell->borderColor = ORANGE;
+            }
+        }
+        return m_selectedCell;
     }
 
     void setTexture(const Texture2D* texture)
@@ -100,6 +140,8 @@ public:
 private:
 
     const Texture2D* m_Texture = nullptr;
+    Camera2D& m_PaletteCam;
+    Tile* m_selectedCell = nullptr;
 
     Vector2 m_AnchorPoint = { 0.0f , 300.0f };
     Vector2 m_TextureSize = { 0, 0 };

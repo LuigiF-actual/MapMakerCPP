@@ -51,51 +51,17 @@ private:
 	{
 		if ((m_PlMouse.isMousePressed()))
 		{
-				if ((m_PlMouse.getMousePos().y < m_TexturesPallete.getTileArr().at(0).body.y) && (m_CurrentTexture))
+				if ((m_PlMouse.getMousePos().y < m_TexturesPallete.getTileArr().at(0).body.y) && (m_SelectedCell))
 				{
 					Tile* p_Tile = m_TileGrid.findTile(m_PlMouse.getMousePos());
 					if (p_Tile)
 					{
-						cmd.execute(*p_Tile, m_CurrentSourceRec, m_CurrentTexture);
+						cmd.execute(*p_Tile, m_SelectedCell->scRec, m_SelectedCell->texture);
 					}
 				}
 				else
 				{
-					for (Tile& tile : m_TexturesPallete.getTileArr())
-					{
-						if (CheckCollisionPointRec(GetScreenToWorld2D(GetMousePosition(), m_paletteCam), tile.body))
-						{
-							m_CurrentTexture = &m_TexturesPallete.getTexture();
-							
-							if ((tile.scRec.x > m_CurrentTexture->width - Config::paletteTilesSize) || (tile.scRec.y > m_CurrentTexture->height - Config::paletteTilesSize))
-							{
-
-								std::cout << "Calling break\n";
-								break;
-							}
-							
-							if (!m_SelectedCell)
-							{
-								m_SelectedCell = &tile;
-								m_SelectedCell->borderColor = ORANGE;
-							}
-
-							if (!ColorIsEqual(m_SelectedCell->borderColor, tile.borderColor))
-							{
-								m_SelectedCell->borderColor = BLACK;
-								m_SelectedCell = &tile;
-								m_SelectedCell->borderColor = ORANGE;
-							}
-							m_CurrentSourceRec = {
-								tile.scRec.x,
-								tile.scRec.y,
-								16,
-								16
-							};
-
-							break;
-						}
-					}
+					m_SelectedCell = m_TexturesPallete.getSelectedCell();
 				}
 		}
 	}
@@ -108,8 +74,6 @@ private:
 	PlayerMouse m_PlMouse;
 	KeyboardManager keyboard;
 
-	const Texture2D* m_CurrentTexture = nullptr;
-	Rectangle m_CurrentSourceRec = { 0,0,0.0f,0.0f };
 	Tile* m_SelectedCell = nullptr;
 
 

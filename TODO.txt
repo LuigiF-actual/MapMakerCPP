@@ -1,0 +1,10 @@
+1. Make the map screen move 
+1.1 Make it so you can also zoom out/in the top screen 
+
+2. Change so you can only use mouse and up,down,left,right to move palette screen
+
+3. When the user press H show a help screen 
+
+4. Paint brush too cluttered fix it 
+
+5. 

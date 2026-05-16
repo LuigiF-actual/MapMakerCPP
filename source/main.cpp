@@ -26,11 +26,12 @@ int main(void)
     Camera2D worldCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
     
     
-    TexturePalette palette(mytex);
-
-    Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, GetScreenWidth(), GetScreenHeight()};
     Camera2D paletteCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
     paletteCam.zoom = 1.0f;
+
+    TexturePalette palette(mytex,paletteCam);
+
+    Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, GetScreenWidth(), GetScreenHeight()};
 
     TileGrid worldGrid(100, 100, 64.0f, { -100.0f, -100.0f });
     TileRenderer renderer;
