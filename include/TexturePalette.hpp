@@ -45,7 +45,7 @@ public:
             }
         }
 
-        m_AnchorPoint.y = GetScreenHeight() - 450;
+        m_AnchorPoint.y = GetScreenHeight() - (GetScreenHeight() * (30.0f / 100.0f));
         if (m_AnchorPoint.y != m_PaletteBackGround.body.y)
         {
             m_ClickCells.setGidPos(m_AnchorPoint);

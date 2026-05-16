@@ -44,7 +44,7 @@ int main(void)
 
         ClearBackground(RAYWHITE);
         
-
+        //Draws map tiles
         BeginMode2D(worldCam);
 
         renderer.draw(worldGrid,worldCam);
@@ -55,6 +55,8 @@ int main(void)
 
         BeginScissorMode((int)palette.getPosition().x, (int)palette.getPosition().y, (int)GetScreenWidth(), (int)GetScreenHeight() - (int)palette.getPosition().y);
 
+
+        //Draws palette tiles
         BeginMode2D(paletteCam);
 
         palette.update();
