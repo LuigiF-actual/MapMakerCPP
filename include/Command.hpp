@@ -65,7 +65,6 @@ public:
 		//Checks to see if the tile texture is not the same that it will be aplied, if it is it will not be applied
 		if ( ! ((tile.scRec.x == newSourceRec.x) && (tile.scRec.y == newSourceRec.y) && (newTexture == tile.texture)))
 		{
-			std::cout << "New command created\n";
 			std::unique_ptr<PaintTileCmd> paintCommand = std::make_unique<PaintTileCmd>(tile, newSourceRec , newTexture);
 
 			paintCommand->execute();

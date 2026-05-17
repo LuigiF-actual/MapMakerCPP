@@ -11,10 +11,14 @@ endif()
 
 project("MapMakerC++" LANGUAGES C CXX)
 
+file(GLOB HEADER_FILES CONFIGURE_DEPENDS "include/*.hpp")
+
 # Add source to this project's executable.
 add_executable(MapMakerC++ 
+${HEADER_FILES}
 "source/main.cpp"
 )
+
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET MapMakerC++ PROPERTY CXX_STANDARD 20)

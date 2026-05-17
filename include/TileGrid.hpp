@@ -62,7 +62,6 @@ public:
 
 	Tile* findTile(Vector2 position)
 	{
-		std::cout << position.x << " :: " << position.y << "\n";
 		for (auto& tile : m_TileGrid)
 		{
 			if (CheckCollisionPointRec(position, tile.body))

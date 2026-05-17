@@ -10,6 +10,7 @@
 #include <Config.hpp>
 #include <FileExplorer.hpp>
 #include <string>
+#include <utilz.hpp>
 
 
 void moveCamera(Camera2D& camera, Vector2 lockIn);
@@ -74,7 +75,7 @@ int main(void)
         
         DrawText(std::to_string(GetFPS()).c_str(), 0.0f, 0.0f, 35, PINK);
 
-        moveCamera(paletteCam,palette.getPosition());
+        moveCamera(paletteCam, { 0.0f,0.0f });
 
         EndDrawing();
     }

@@ -56,7 +56,7 @@ private:
 					Tile* p_Tile = m_TileGrid.findTile(m_PlMouse.getMousePos());
 					if (p_Tile)
 					{
-						cmd.execute(*p_Tile, m_SelectedCell->scRec, m_SelectedCell->texture);
+						cmd.execute(*p_Tile, m_SelectedCell->scRec,&m_TexturesPallete.getTexture());
 					}
 				}
 				else

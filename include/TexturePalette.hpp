@@ -13,6 +13,7 @@ struct BackGround
 {
     Color color;
     Rectangle body;
+    
 };
 
 
@@ -84,7 +85,6 @@ public:
             if ((newSelect->scRec.x > m_Texture->width - Config::paletteTilesSize) || (newSelect->scRec.y > m_Texture->height - Config::paletteTilesSize))
             {
 
-                std::cout << "Calling break\n";
                 return nullptr;
             }
 
@@ -92,6 +92,7 @@ public:
             if (!m_selectedCell) 
             {
                 m_selectedCell = newSelect;
+                m_selectedCell->texture = m_Texture;
                 m_selectedCell->borderColor = ORANGE;
             }
 
