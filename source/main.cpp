@@ -13,6 +13,7 @@
 
 
 void moveCamera(Camera2D& camera, Vector2 lockIn);
+void moveCamera2(Camera2D& camera, Vector2 lockIn);
 
 int main(void)
 {
@@ -51,6 +52,7 @@ int main(void)
         renderer.draw(worldGrid,worldCam);
 
         EndMode2D();
+        moveCamera2(worldCam,{0,0});
 
         DrawRectangleRec(palette.getBackground().body, palette.getBackground().color);
 
@@ -115,6 +117,42 @@ void moveCamera(Camera2D& camera,Vector2 lockIn)
         camera.zoom = 1.0f;
         camera.target = {0.0f,0.0f};
         camera.offset = {0.0f,0.0f};
+        std::cout << "locked in" << "\n ";
+    }
+}
+void moveCamera2(Camera2D& camera, Vector2 lockIn)
+{
+    if (IsKeyDown(KEY_UP))
+    {
+        camera.target.y -= 250.0f * GetFrameTime();
+    }
+    if (IsKeyDown(KEY_DOWN))
+    {
+        camera.target.y += 250.0f * GetFrameTime();
+    }
+    if (IsKeyDown(KEY_LEFT))
+    {
+        camera.target.x += 250.0f * GetFrameTime();
+    }
+    if (IsKeyDown(KEY_RIGHT))
+    {
+        camera.target.x -= 250.0f * GetFrameTime();
+    }
+    if (IsKeyPressed(KEY_T))
+    {
+        camera.zoom += 0.2f;
+        std::cout << camera.zoom << "\n";
+    }
+    if (IsKeyPressed(KEY_G))
+    {
+        camera.zoom -= 0.2f;
+        std::cout << camera.zoom << "\n";
+    }
+    if (IsKeyPressed(KEY_X))
+    {
+        camera.zoom = 1.0f;
+        camera.target = { 0.0f,0.0f };
+        camera.offset = { 0.0f,0.0f };
         std::cout << "locked in" << "\n ";
     }
 }
