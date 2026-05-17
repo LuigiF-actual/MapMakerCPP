@@ -7,6 +7,7 @@
 ### cmake -B build
 ### cmake --build build
 ### compiled and tested with MSVC 19.50+ and MinGW-W64 15.2.0 
+### works on Windows and Linux
 
 ## Important keymaps
 ### Press "k" to open file explorer to select a new atlas
