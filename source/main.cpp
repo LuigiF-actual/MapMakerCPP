@@ -36,7 +36,7 @@ int main(void)
     TileRenderer renderer;
 
 
-    PaintBrush paintBrush(worldGrid, palette,paletteCam);
+    PaintBrush paintBrush(worldGrid, palette,paletteCam,worldCam);
 
 
     while (!WindowShouldClose())   
@@ -45,29 +45,34 @@ int main(void)
 
         ClearBackground(RAYWHITE);
         
-        //Draws map tiles
-        BeginMode2D(worldCam);
+        //World part of the screen
 
-        renderer.draw(worldGrid,worldCam);
+        BeginScissorMode(0.0f, 0.0f, (int)GetScreenWidth(), (int)palette.getPosition().y);
 
-        EndMode2D();
-        moveCamera2(worldCam,{0,0});
+            BeginMode2D(worldCam);
 
+            renderer.draw(worldGrid,worldCam);
+
+            EndMode2D();
+
+        EndScissorMode();
+        
+        utilz::moveWorldCam(worldCam);
+
+
+        //background of the pallete
         DrawRectangleRec(palette.getBackground().body, palette.getBackground().color);
 
+        //Palette part of the screen
         BeginScissorMode((int)palette.getPosition().x, (int)palette.getPosition().y, (int)GetScreenWidth(), (int)GetScreenHeight() - (int)palette.getPosition().y);
 
+            BeginMode2D(paletteCam);
 
-        //Draws palette tiles
-        BeginMode2D(paletteCam);
+            palette.update();
 
-        palette.update();
+            renderer.drawRecLines(palette.getGrid());
 
-        renderer.drawRecLines(palette.getGrid());
-
-        EndMode2D();
-
-        utilz::moveWorldCam(worldCam);
+            EndMode2D();
 
         EndScissorMode();
 

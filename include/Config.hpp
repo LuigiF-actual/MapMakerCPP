@@ -10,7 +10,7 @@ namespace Config
 
 
 	constexpr int textureTileSize = 16;
-	constexpr float tileSize = 32;
+	constexpr float tileSize = 64.0f;
 	constexpr int paletteTextureScale = 3;
 	constexpr int paletteTilesSize = 16;
 

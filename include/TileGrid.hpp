@@ -49,7 +49,7 @@ public:
 
 	Tile* at(int column,int row)
 	{
-		if (column >= m_Cols || row >= m_Rows) {
+		if (column < 0 || column >= m_Cols || row < 0 || row >= m_Rows) {
 			return nullptr;
 		}
 		return &m_TileGrid[row * m_Cols + column];
@@ -101,6 +101,7 @@ public:
 		}
 	}
 
+	Vector2 offset() const { return m_GridOffSet; }
 
 	int cols() const { return m_Cols; }
 
@@ -125,14 +126,14 @@ public:
 
 	void draw(TileGrid& mp_GridToDraw, Camera2D& camera) const
 	{
-		Vector2 windowStart = GetScreenToWorld2D(Vector2{ 0,0 }, camera);
+		Vector2 windowStart = GetScreenToWorld2D(mp_GridToDraw.offset(), camera);
 		Vector2 windowEnd = GetScreenToWorld2D(Vector2{ float(GetScreenWidth()), float(GetScreenHeight()) }, camera);
 
 		for (auto y = int(windowStart.y / Config::tileSize); y < int(windowEnd.y / Config::tileSize) + 1; y++)
 		{
-			for (auto x = int(windowStart.x / Config::tileSize); x < int(windowEnd.x / Config::tileSize) + 1; x++)
+			for (auto x = int(windowStart.x / Config::tileSize); x < int(windowEnd.x / Config::tileSize) + Config::tileSize; x++)
 			{
-				if ( ! (x < 0 || x >= (int)mp_GridToDraw.getGridSize().x || y < 0 || y >= (int)mp_GridToDraw.getGridSize().y))
+				if ( ! (x < 0 || x >= mp_GridToDraw.cols() || y < 0 || y >= mp_GridToDraw.rows()))
 				{
 
 					Tile* tile = mp_GridToDraw.at(x, y);

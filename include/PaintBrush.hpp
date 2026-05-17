@@ -16,11 +16,12 @@ class PaintBrush
 {
 
 public:
-	PaintBrush(TileGrid& tileGrid,TexturePalette& palette,Camera2D& paletteCamera)
+	PaintBrush(TileGrid& tileGrid,TexturePalette& palette,Camera2D& paletteCamera,Camera2D& worldCamera)
 		: 
 		m_TileGrid(tileGrid),
 		m_TexturesPallete(palette),
-		m_paletteCam(paletteCamera)
+		m_paletteCam(paletteCamera),
+		m_worldCam(worldCamera)
 	{
 	}
 
@@ -53,7 +54,7 @@ private:
 		{
 				if ((m_PlMouse.getMousePos().y < m_TexturesPallete.getTileArr().at(0).body.y) && (m_SelectedCell))
 				{
-					Tile* p_Tile = m_TileGrid.findTile(m_PlMouse.getMousePos());
+					Tile* p_Tile = m_TileGrid.findTile(GetScreenToWorld2D(m_PlMouse.getMousePos(),m_worldCam));
 					if (p_Tile)
 					{
 						cmd.execute(*p_Tile, m_SelectedCell->scRec,&m_TexturesPallete.getTexture());
@@ -71,6 +72,8 @@ private:
 	TileGrid& m_TileGrid;
 	TexturePalette& m_TexturesPallete;
 	Camera2D& m_paletteCam;
+	Camera2D& m_worldCam;
+
 	PlayerMouse m_PlMouse;
 	KeyboardManager keyboard;
 

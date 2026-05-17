@@ -11,7 +11,6 @@ public:
 	Vector2 getMousePos()
 	{
 		return GetMousePosition();
-		
 	}
 
 	bool isMouseClicked()
