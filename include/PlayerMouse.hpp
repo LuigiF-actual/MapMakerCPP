@@ -11,11 +11,13 @@ public:
 	Vector2 getMousePos()
 	{
 		return GetMousePosition();
+		
 	}
 
 	bool isMouseClicked()
 	{
 		return IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+		
 	}
 
 	bool isMousePressed()

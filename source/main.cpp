@@ -18,25 +18,23 @@ void moveCamera2(Camera2D& camera, Vector2 lockIn);
 
 int main(void)
 {
-
     InitWindow(Config::screenWidth, Config::screenHeight , "MapMakerC++");
 
     SetWindowState(FLAG_WINDOW_RESIZABLE);
+    MaximizeWindow();
 
-    const Texture2D* mytex = &AtlasManager::getInstance().getFirstTexture();
-
-    Camera2D worldCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
     
     
     Camera2D paletteCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
-    paletteCam.zoom = 1.0f;
-
-    TexturePalette palette(mytex,paletteCam);
-
+    TexturePalette palette(&AtlasManager::getInstance().getFirstTexture(),paletteCam);
     Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, GetScreenWidth(), GetScreenHeight()};
 
+
+
+    Camera2D worldCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
     TileGrid worldGrid(100, 100, 64.0f, { -100.0f, -100.0f });
     TileRenderer renderer;
+
 
     PaintBrush paintBrush(worldGrid, palette,paletteCam);
 
@@ -69,13 +67,15 @@ int main(void)
 
         EndMode2D();
 
+        utilz::moveWorldCam(worldCam);
+
         EndScissorMode();
 
         paintBrush.update();
         
         DrawText(std::to_string(GetFPS()).c_str(), 0.0f, 0.0f, 35, PINK);
 
-        moveCamera(paletteCam, { 0.0f,0.0f });
+        utilz::movePaletteCam(paletteCam);
 
         EndDrawing();
     }
@@ -85,75 +85,3 @@ int main(void)
     return 0;
 }
 
-void moveCamera(Camera2D& camera,Vector2 lockIn)
-{
-    if (IsKeyDown(KEY_W))
-    {
-        camera.target.y -= 250.0f * GetFrameTime();
-    }
-    if (IsKeyDown(KEY_S))
-    {
-        camera.target.y += 250.0f * GetFrameTime();
-    }
-    if (IsKeyDown(KEY_D))
-    {
-        camera.target.x += 250.0f * GetFrameTime();
-    }
-    if (IsKeyDown(KEY_A))
-    {
-        camera.target.x -= 250.0f * GetFrameTime();
-    }
-    if (IsKeyPressed(KEY_E))
-    {
-        camera.zoom += 0.2f;
-        std::cout << camera.zoom << "\n";
-    }
-    if (IsKeyPressed(KEY_Q))
-    {
-        camera.zoom -= 0.2f;
-        std::cout << camera.zoom << "\n";
-    }
-    if (IsKeyPressed(KEY_X))
-    {
-        camera.zoom = 1.0f;
-        camera.target = {0.0f,0.0f};
-        camera.offset = {0.0f,0.0f};
-        std::cout << "locked in" << "\n ";
-    }
-}
-void moveCamera2(Camera2D& camera, Vector2 lockIn)
-{
-    if (IsKeyDown(KEY_UP))
-    {
-        camera.target.y -= 250.0f * GetFrameTime();
-    }
-    if (IsKeyDown(KEY_DOWN))
-    {
-        camera.target.y += 250.0f * GetFrameTime();
-    }
-    if (IsKeyDown(KEY_LEFT))
-    {
-        camera.target.x += 250.0f * GetFrameTime();
-    }
-    if (IsKeyDown(KEY_RIGHT))
-    {
-        camera.target.x -= 250.0f * GetFrameTime();
-    }
-    if (IsKeyPressed(KEY_T))
-    {
-        camera.zoom += 0.2f;
-        std::cout << camera.zoom << "\n";
-    }
-    if (IsKeyPressed(KEY_G))
-    {
-        camera.zoom -= 0.2f;
-        std::cout << camera.zoom << "\n";
-    }
-    if (IsKeyPressed(KEY_X))
-    {
-        camera.zoom = 1.0f;
-        camera.target = { 0.0f,0.0f };
-        camera.offset = { 0.0f,0.0f };
-        std::cout << "locked in" << "\n ";
-    }
-}
