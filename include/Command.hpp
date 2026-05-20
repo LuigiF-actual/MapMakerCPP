@@ -61,55 +61,51 @@ private:
 class RectangleFillCmd : public Command
 {
 public:
-	RectangleFillCmd(TileGrid& TileVec,Vector2 begin, Vector2 end, Rectangle newSourceRec, const Texture2D* newTexture, const Texture2D* oldTexture, Rectangle oldScRec)
+	RectangleFillCmd(TileGrid& TileVec,Vector2 begin, Vector2 end, Rectangle newSourceRec, const Texture2D* newTexture)
 		:
 		m_TileGrid(&TileVec),
 		m_Begin(begin),
 		m_End(end),
 		m_NewTexture(newTexture),
-		m_NewSourceRec(newSourceRec),
-		m_OriginalTexture(oldTexture),
-		m_OriginalSourceRec(oldScRec)
+		m_NewSourceRec(newSourceRec)
 	{
-		m_PaintTileVec.reserve(size_t(std::abs(begin.y - end.y)) * size_t(std::abs(begin.x - end.x)));
+		m_PaintTileVec.reserve(size_t(std::abs(begin.y - end.y)+1) * size_t(std::abs(begin.x - end.x)+1));
+		
+		//std::cout << "Rec total size" << size_t(std::abs(begin.y - end.y)+1) * size_t(std::abs(begin.x - end.x)+1) << "\n";
 
-	}
-
-	void execute() override
-	{
-		for (auto y = int(m_Begin.y / Config::tileSize); y < int(m_End.y / Config::tileSize) + 1; y++)
+		for (auto y = int(m_Begin.y ); y < int(m_End.y ) + 1; y++)
 		{
-			for (auto x = int(m_Begin.x / Config::tileSize); x < int(m_End.x / Config::tileSize) + 1; x++)
+			for (auto x = int(m_Begin.x); x < int(m_End.x ) + 1; x++)
 			{
 				if (!(x < 0 || x >= m_TileGrid->cols() || y < 0 || y >= m_TileGrid->rows()))
 				{
 
 					Tile* tile = m_TileGrid->at(x, y);
-					tile->scRec = m_NewSourceRec;
-					tile->texture = m_NewTexture;
+					m_PaintTileVec.emplace_back(std::make_unique<PaintTileCmd>(*tile, m_NewSourceRec, m_NewTexture));
 				}
 			}
+		}
+	}
+
+	void execute() override
+	{
+		for (auto& i : m_PaintTileVec)
+		{
+			i->execute();
 		}
 	}
 
 	void undo() override
 	{
-		for (auto y = int(m_Begin.y / Config::tileSize); y < int(m_End.y / Config::tileSize) + 1; y++)
+		for (auto& tile : m_PaintTileVec)
 		{
-			for (auto x = int(m_Begin.x / Config::tileSize); x < int(m_End.x / Config::tileSize) + 1; x++)
-			{
-				if (!(x < 0 || x >= m_TileGrid->cols() || y < 0 || y >= m_TileGrid->rows()))
-				{
-
-					Tile* tile = m_TileGrid->at(x, y);
-					tile->scRec = m_OriginalSourceRec;
-					tile->texture = m_OriginalTexture;
-				}
-			}
+			tile->undo();
 		}
 	}
 
 private:
+
+	bool firstTime = true;
 
 	TileGrid* m_TileGrid;
 

@@ -125,15 +125,15 @@ private:
 
 			std::cout << "end " << end.x << " : " << end.y << "\n";
 
-			float beginX = int(std::min(begin.x, end.x));
-			float beginY = int(std::min(begin.y, end.y));
+			float beginX = int(std::min(begin.x, end.x) / Config::tileSize);
+			float beginY = int(std::min(begin.y, end.y) / Config::tileSize) ;
 
-			float endX = int(std::max(begin.x, end.x));
-			float endY = int(std::max(begin.y, end.y));
+			float endX = int(std::max(begin.x, end.x) / Config::tileSize);
+			float endY = int(std::max(begin.y, end.y) / Config::tileSize);
 
-			Tile* tileOld = m_TileGrid.at(beginX / Config::tileSize, beginY / Config::tileSize);
+			Tile* tileOld = m_TileGrid.at(beginX, beginY);
 
-			auto fillRec = std::make_unique<RectangleFillCmd>(m_TileGrid, Vector2{ beginX,beginY }, Vector2{ endX,endY }, m_SelectedCell->scRec, &m_TexturesPallete.getTexture(), tileOld->texture, tileOld->scRec);
+			auto fillRec = std::make_unique<RectangleFillCmd>(m_TileGrid, Vector2{ beginX,beginY }, Vector2{ endX, endY }, m_SelectedCell->scRec, &m_TexturesPallete.getTexture());
 			cmd.execute(std::move(fillRec));
 
 			begin = { 0.0f };
