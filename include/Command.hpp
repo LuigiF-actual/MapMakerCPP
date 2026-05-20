@@ -2,6 +2,7 @@
 
 #include <stack>
 #include <memory>
+#include <vector>
 
 #include <raylib.h>
 #include "TileGrid.hpp"
@@ -57,21 +58,85 @@ private:
 	Tile* mp_ChangedTile = nullptr;
 };
 
+class RectangleFillCmd : public Command
+{
+public:
+	RectangleFillCmd(TileGrid& TileVec,Vector2 begin, Vector2 end, Rectangle newSourceRec, const Texture2D* newTexture, const Texture2D* oldTexture, Rectangle oldScRec)
+		:
+		m_TileGrid(&TileVec),
+		m_Begin(begin),
+		m_End(end),
+		m_NewTexture(newTexture),
+		m_NewSourceRec(newSourceRec),
+		m_OriginalTexture(oldTexture),
+		m_OriginalSourceRec(oldScRec)
+	{
+		m_PaintTileVec.reserve(size_t(std::abs(begin.y - end.y)) * size_t(std::abs(begin.x - end.x)));
+
+	}
+
+	void execute() override
+	{
+		for (auto y = int(m_Begin.y / Config::tileSize); y < int(m_End.y / Config::tileSize) + 1; y++)
+		{
+			for (auto x = int(m_Begin.x / Config::tileSize); x < int(m_End.x / Config::tileSize) + 1; x++)
+			{
+				if (!(x < 0 || x >= m_TileGrid->cols() || y < 0 || y >= m_TileGrid->rows()))
+				{
+
+					Tile* tile = m_TileGrid->at(x, y);
+					tile->scRec = m_NewSourceRec;
+					tile->texture = m_NewTexture;
+				}
+			}
+		}
+	}
+
+	void undo() override
+	{
+		for (auto y = int(m_Begin.y / Config::tileSize); y < int(m_End.y / Config::tileSize) + 1; y++)
+		{
+			for (auto x = int(m_Begin.x / Config::tileSize); x < int(m_End.x / Config::tileSize) + 1; x++)
+			{
+				if (!(x < 0 || x >= m_TileGrid->cols() || y < 0 || y >= m_TileGrid->rows()))
+				{
+
+					Tile* tile = m_TileGrid->at(x, y);
+					tile->scRec = m_OriginalSourceRec;
+					tile->texture = m_OriginalTexture;
+				}
+			}
+		}
+	}
+
+private:
+
+	TileGrid* m_TileGrid;
+
+	Vector2 m_Begin = { 0 };
+	Vector2 m_End = { 0 };
+
+
+	const Texture2D* m_OriginalTexture = nullptr;
+	Rectangle m_OriginalSourceRec = { 0 };
+
+	const Texture2D* m_NewTexture = nullptr;
+	Rectangle m_NewSourceRec = { 0 };
+
+	std::vector<std::unique_ptr<PaintTileCmd>> m_PaintTileVec;
+
+};
+
 class CommandManager
 {
 public:
-	void execute(Tile& tile,Rectangle newSourceRec ,const Texture2D* newTexture)
+	void execute(std::unique_ptr<Command> cmd)
 	{
 		//Checks to see if the tile texture is not the same that it will be aplied, if it is it will not be applied
-		if ( ! ((tile.scRec.x == newSourceRec.x) && (tile.scRec.y == newSourceRec.y) && (newTexture == tile.texture)))
-		{
-			std::unique_ptr<PaintTileCmd> paintCommand = std::make_unique<PaintTileCmd>(tile, newSourceRec , newTexture);
+		//if ( ! ((tile.scRec.x == newSourceRec.x) && (tile.scRec.y == newSourceRec.y) && (newTexture == tile.texture)))
+		cmd->execute();
+		m_UndoStack.push(std::move(cmd));
 
-			paintCommand->execute();
-
-			m_UndoStack.push(std::move(paintCommand));
-
-		}
 	}
 	void undo()
 	{
