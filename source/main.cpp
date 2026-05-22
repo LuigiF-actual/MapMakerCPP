@@ -11,10 +11,8 @@
 #include <FileExplorer.hpp>
 #include <string>
 #include <utilz.hpp>
+#include <HelpScreen.hpp>
 
-
-void moveCamera(Camera2D& camera, Vector2 lockIn);
-void moveCamera2(Camera2D& camera, Vector2 lockIn);
 
 int main(void)
 {
@@ -24,7 +22,6 @@ int main(void)
     MaximizeWindow();
 
     
-    
     Camera2D paletteCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
     TexturePalette palette(&AtlasManager::getInstance().getFirstTexture(),paletteCam);
     Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, GetScreenWidth(), GetScreenHeight()};
@@ -32,11 +29,12 @@ int main(void)
 
 
     Camera2D worldCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
-    TileGrid worldGrid(100, 100, 64.0f, { -100.0f, -100.0f });
+    TileGrid worldGrid(1000, 1000, 64.0f, { -100.0f, -100.0f });
     TileRenderer renderer;
 
 
     PaintBrush paintBrush(worldGrid, palette,paletteCam,worldCam);
+    HelpScreen help;
 
 
     while (!WindowShouldClose())   
@@ -80,7 +78,13 @@ int main(void)
         
         DrawText(std::to_string(GetFPS()).c_str(), 0.0f, 0.0f, 35, PINK);
 
+        if (IsKeyDown(KEY_H))
+        {
+            help.draw();
+        }
+
         utilz::movePaletteCam(paletteCam);
+        
 
         EndDrawing();
     }

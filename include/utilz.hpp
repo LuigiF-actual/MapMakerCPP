@@ -70,12 +70,12 @@ namespace utilz {
         }
         if (IsKeyPressed(KEY_E))
         {
-            worldCamera.zoom += 100.0f * GetFrameTime();
+            worldCamera.zoom = expf(logf(worldCamera.zoom) + (0.1f));
             std::cout << worldCamera.zoom << "\n";
         }
         if (IsKeyPressed(KEY_Q))
         {
-            worldCamera.zoom -= 0.2f;
+            worldCamera.zoom = expf(logf(worldCamera.zoom) - (0.1f));
             std::cout << worldCamera.zoom << "\n";
         }
         if (IsKeyPressed(KEY_X))

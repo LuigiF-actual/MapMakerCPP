@@ -143,13 +143,19 @@ private:
 
 	void paintTile()
 	{
-		Tile* p_Tile = m_TileGrid.findTile(GetScreenToWorld2D(m_PlMouse.getMousePos(), m_worldCam));
-
-		auto paintCmd = std::make_unique<PaintTileCmd>(*p_Tile, m_SelectedCell->scRec, &m_TexturesPallete.getTexture());
-
-		if (p_Tile)
+		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 		{
-			cmd.execute(std::move(paintCmd));
+			Tile* p_Tile = m_TileGrid.findTile(GetScreenToWorld2D(m_PlMouse.getMousePos(), m_worldCam));
+
+			if (p_Tile)
+			{	
+				//Checks to see if the tile texture is not the same that it will be aplied, if it is it will not be applied
+				if (!((p_Tile->scRec.x == m_SelectedCell->scRec.x) && (p_Tile->scRec.y == m_SelectedCell->scRec.y) && (&m_TexturesPallete.getTexture() == p_Tile->texture)))
+				{
+					auto paintCmd = std::make_unique<PaintTileCmd>(*p_Tile, m_SelectedCell->scRec, &m_TexturesPallete.getTexture());
+					cmd.execute(std::move(paintCmd));
+				}
+			}
 		}
 	}
 
