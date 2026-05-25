@@ -3,6 +3,9 @@
 #include <iostream>
 
 #include <raylib.h>
+#include <sqlite3.h>
+
+
 #include <AtlasDictionary.hpp>
 #include <TileGrid.hpp>
 #include <PaintBrush.hpp>
@@ -13,6 +16,7 @@
 #include <utilz.hpp>
 #include <HelpScreen.hpp>
 
+#include <tinyfiledialogs.h>
 
 int main(void)
 {

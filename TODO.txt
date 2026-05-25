@@ -1,10 +1,18 @@
-1. Make the map screen move 
-1.1 Make it so you can also zoom out/in the top screen 
+1. Make the map screen move DONE
+1.1 Make it so you can also zoom out/in the top screen DONE 
 
-2. Change so you can only use mouse and up,down,left,right to move palette screen
+2. Change so you can only use mouse and up,down,left,right to move palette screen DONE but i done with mouse instead
 
-3. When the user press H show a help screen 
+3. When the user press H show a help screen DONE
 
 4. Paint brush too cluttered fix it 
 
-5. 
+5. Integrate Sqlite to the project for permanent map storage
+
+6. make it so the grid in  texture pallete is dinamic IE when texture change the grid ajust to it
+
+7. make a menu, when you start the program it shows your saves alongside a mini picture of the map besides it 
+
+8. make a navbar on top to show FPS current draw mode buttons to pick the draw mode etc...
+
+9. 
