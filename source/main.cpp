@@ -23,7 +23,7 @@ int main(void)
 
     
     Camera2D paletteCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
-    TexturePalette palette(&AtlasManager::getInstance().getFirstTexture(),paletteCam);
+    TexturePalette palette(&AtlasManager::getInstance().getTexture(Config::default_Atlas.data()), paletteCam);
     Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, GetScreenWidth(), GetScreenHeight()};
 
 

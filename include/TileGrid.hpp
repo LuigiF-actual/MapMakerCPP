@@ -33,7 +33,7 @@ public:
 			{
 				m_TileGrid.emplace_back(
 					Tile{
-						&AtlasManager::getInstance().getFirstTexture(),
+						&AtlasManager::getInstance().getTexture(Config::default_Atlas.data()),
 						Rectangle{
 							(float)column * m_TileSize + m_GridOffSet.x,
 							(float)row * m_TileSize + m_GridOffSet.y,
