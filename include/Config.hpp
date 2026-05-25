@@ -15,4 +15,7 @@ namespace Config
 	constexpr int paletteTilesSize = 16;
 
 	inline const std::filesystem::path imagesDir = std::filesystem::path(RESOURCES_PATH).lexically_normal().string();
+
+	inline const std::filesystem::path savesDir = std::filesystem::path(SAVES_PATH).lexically_normal().string();
+
 }

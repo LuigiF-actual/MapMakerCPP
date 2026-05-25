@@ -3,6 +3,9 @@
 #include <iostream>
 
 #include <raylib.h>
+#include <sqlite3.h>
+
+
 #include <AtlasDictionary.hpp>
 #include <TileGrid.hpp>
 #include <PaintBrush.hpp>
@@ -13,6 +16,7 @@
 #include <utilz.hpp>
 #include <HelpScreen.hpp>
 
+#include <tinyfiledialogs.h>
 
 int main(void)
 {
@@ -21,6 +25,15 @@ int main(void)
     SetWindowState(FLAG_WINDOW_RESIZABLE);
     MaximizeWindow();
 
+    sqlite3* DB;
+    int exit = sqlite3_open(std::filesystem::path(Config::savesDir).append("test.db").string().c_str(),&DB);
+
+    if (exit) {
+        std::cerr << "Error open DB " << sqlite3_errmsg(DB) << std::endl;
+    }
+    else
+        std::cout << "Opened Database Successfully!" << std::endl;
+    sqlite3_close(DB);
     
     Camera2D paletteCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
     TexturePalette palette(&AtlasManager::getInstance().getFirstTexture(),paletteCam);
@@ -35,6 +48,19 @@ int main(void)
 
     PaintBrush paintBrush(worldGrid, palette,paletteCam,worldCam);
     HelpScreen help;
+
+    const char* charr[1] = { "*.db" };
+    char const* mimi = tinyfd_saveFileDialog(
+        "lalala",
+        Config::savesDir.string().c_str(),
+        1,
+        charr,
+        "*.db"
+    );
+    if (mimi)
+    {
+        std::cout << "\n" << mimi << "\n";
+    }
 
 
     while (!WindowShouldClose())   
