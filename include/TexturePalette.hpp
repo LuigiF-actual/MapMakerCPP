@@ -59,9 +59,6 @@ public:
             m_PaletteBackGround.body.width = GetScreenWidth();
 
         }
-
-
-
     }
 
 

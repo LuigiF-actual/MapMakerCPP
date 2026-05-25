@@ -105,11 +105,16 @@ public:
 
 private:
 
+	bool firstTime = true;
 
 	TileGrid* m_TileGrid;
 
 	Vector2 m_Begin = { 0 };
 	Vector2 m_End = { 0 };
+
+
+	const Texture2D* m_OriginalTexture = nullptr;
+	Rectangle m_OriginalSourceRec = { 0 };
 
 	const Texture2D* m_NewTexture = nullptr;
 	Rectangle m_NewSourceRec = { 0 };

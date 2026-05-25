@@ -53,6 +53,9 @@ private:
 
 		switch (key)
 		{
+		case KEY_I:
+			mode = PaintMode::PICKCOLOR;
+			break;
 		case KEY_B:
 			mode = PaintMode::NORMAL;
 			break;
@@ -76,22 +79,35 @@ private:
 	void checkMouseInput()
 	{
 
-		if (GetMousePosition().y > m_TexturesPallete.getPosition().y)
+		switch (mode)
 		{
+		case PaintMode::RECTANGLE:
+			rectangleFill();
+			break;
+		case PaintMode::NORMAL:
+			paintTile();
+			break;
+		case PaintMode::PICKCOLOR:
 			pickPaletteCell();
+			break;
 		}
-		else 
+				/*
+		if ((m_PlMouse.isMousePressed()))
 		{
-			switch (mode)
-			{
-			case PaintMode::RECTANGLE:
-				rectangleFill();
-				break;
-			case PaintMode::NORMAL:
-				paintTile();
-				break;
-			}
+				if ((m_PlMouse.getMousePos().y < m_TexturesPallete.getTileArr().at(0).body.y) && (m_SelectedCell))
+				{
+					Tile* p_Tile = m_TileGrid.findTile(GetScreenToWorld2D(m_PlMouse.getMousePos(),m_worldCam));
+					if (p_Tile)
+					{
+						cmd.execute(*p_Tile, m_SelectedCell->scRec,&m_TexturesPallete.getTexture());
+					}
+				}
+				else
+				{
+					m_SelectedCell = m_TexturesPallete.getSelectedCell();
+				}
 		}
+				*/
 	}
 
 private:
