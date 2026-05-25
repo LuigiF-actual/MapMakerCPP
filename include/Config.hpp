@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <filesystem>
-#include <string_view>
 
 namespace Config
 {
@@ -17,6 +16,6 @@ namespace Config
 
 	inline const std::filesystem::path imagesDir = std::filesystem::path(RESOURCES_PATH).lexically_normal().string();
 
+	inline const std::filesystem::path savesDir = std::filesystem::path(SAVES_PATH).lexically_normal().string();
 
-	constexpr std::string_view default_Atlas = "GrassComplete";
 }

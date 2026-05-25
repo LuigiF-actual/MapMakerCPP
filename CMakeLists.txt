@@ -64,7 +64,15 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
-FetchContent_MakeAvailable(raylib tinyfiledialogs)
+FetchContent_Declare(
+    sqlite3
+    URL "https://sqlite.org/2026/sqlite-amalgamation-3530100.zip"
+    SOURCE_DIR sqlite3 
+    URL_HASH SHA3_256=3c07136e4f6b5dd0c395be86455014039597bc65b6851f7111e88f71b6e06114
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+
+FetchContent_MakeAvailable(raylib tinyfiledialogs sqlite3)
 
 file(REMOVE_RECURSE ${raylib_SOURCE_DIR}/examples)
 file(REMOVE_RECURSE ${raylib_SOURCE_DIR}/projects)
@@ -82,15 +90,38 @@ target_sources(tinyfiledialogs_lib
         ${tinyfiledialogs_SOURCE_DIR}/tinyfiledialogs.h
 )
 
+
+add_library(sqlite3_lib)
+
+target_sources(sqlite3_lib
+    PRIVATE 
+        ${sqlite3_SOURCE_DIR}/sqlite3.c 
+        ${sqlite3_SOURCE_DIR}/shell.c 
+
+    PUBLIC 
+    FILE_SET HEADERS 
+    FILES 
+        ${sqlite3_SOURCE_DIR}/sqlite3.h 
+        ${sqlite3_SOURCE_DIR}/sqlite3ext.h 
+
+)
+
 target_link_libraries(MapMakerC++
     raylib
     tinyfiledialogs_lib
+    sqlite3_lib
 )
 
 target_include_directories(MapMakerC++ PUBLIC "include")
-target_include_directories(MapMakerC++ PUBLIC ${tinyfiledialogs_SOURCE_DIR})
 target_include_directories(MapMakerC++ PUBLIC "images")
+
+target_include_directories(MapMakerC++ PUBLIC ${tinyfiledialogs_SOURCE_DIR})
+target_include_directories(MapMakerC++ PUBLIC ${sqlite3_SOURCE_DIR})
 
 target_compile_definitions(MapMakerC++ PRIVATE
     RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/images/"
+)
+
+target_compile_definitions(MapMakerC++ PRIVATE
+    SAVES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/saves/"
 )
