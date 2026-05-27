@@ -3,6 +3,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+
+
 namespace utilz {
 	void movePaletteCam(Camera2D& paletteCamera)
 	{
@@ -86,4 +88,44 @@ namespace utilz {
             std::cout << "locked in" << "\n ";
         }
     }
+
+    void drawEditor(TileGrid& worldGrid, TexturePalette& palette,TileRenderer& renderer,PaintBrush& paintBrush, Camera2D& worldCam, Camera2D& paletteCam)
+    {
+        BeginScissorMode(0.0f, 0.0f, (int)GetScreenWidth(), (int)palette.getPosition().y);
+
+        BeginMode2D(worldCam);
+
+        renderer.draw(worldGrid, worldCam);
+
+        EndMode2D();
+
+        EndScissorMode();
+
+        utilz::moveWorldCam(worldCam);
+
+
+        //background of the pallete
+        DrawRectangleRec(palette.getBackground().body, palette.getBackground().color);
+
+        //Palette part of the screen
+        BeginScissorMode((int)palette.getPosition().x, (int)palette.getPosition().y, (int)GetScreenWidth(), (int)GetScreenHeight() - (int)palette.getPosition().y);
+
+        BeginMode2D(paletteCam);
+
+        palette.update();
+
+        renderer.drawRecLines(palette.getGrid());
+
+        EndMode2D();
+
+        EndScissorMode();
+
+        paintBrush.update();
+
+        DrawText(std::to_string(GetFPS()).c_str(), 0.0f, 0.0f, 35, GREEN);
+
+
+        utilz::movePaletteCam(paletteCam);
+    }
+
 }

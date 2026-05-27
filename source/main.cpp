@@ -4,6 +4,7 @@
 
 #include <raylib.h>
 #include <sqlite3.h>
+#include <tinyfiledialogs.h>
 
 
 #include <AtlasDictionary.hpp>
@@ -15,8 +16,14 @@
 #include <string>
 #include <utilz.hpp>
 #include <HelpScreen.hpp>
+#include <DataBase.hpp>
+#include <Menu.hpp>
 
-#include <tinyfiledialogs.h>
+enum class Scene : unsigned char
+{
+    MENU,
+    EDITOR
+};
 
 int main(void)
 {
@@ -25,12 +32,17 @@ int main(void)
     SetWindowState(FLAG_WINDOW_RESIZABLE);
     MaximizeWindow();
 
+    Scene scene = Scene::EDITOR;
+
+    DataBase DB;
+    DB.createTable();
+
     
     Camera2D paletteCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
     TexturePalette palette(&AtlasManager::getInstance().getTexture(Config::default_Atlas.data()), paletteCam);
-    Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, GetScreenWidth(), GetScreenHeight()};
+    Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, (float)GetScreenWidth(), (float)GetScreenHeight()};
 
-
+    Menu menu;
 
     Camera2D worldCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
     TileGrid worldGrid(1000, 1000, 64.0f, { -100.0f, -100.0f });
@@ -49,46 +61,26 @@ int main(void)
         
         //World part of the screen
 
-        BeginScissorMode(0.0f, 0.0f, (int)GetScreenWidth(), (int)palette.getPosition().y);
-
-            BeginMode2D(worldCam);
-
-            renderer.draw(worldGrid,worldCam);
-
-            EndMode2D();
-
-        EndScissorMode();
-        
-        utilz::moveWorldCam(worldCam);
-
-
-        //background of the pallete
-        DrawRectangleRec(palette.getBackground().body, palette.getBackground().color);
-
-        //Palette part of the screen
-        BeginScissorMode((int)palette.getPosition().x, (int)palette.getPosition().y, (int)GetScreenWidth(), (int)GetScreenHeight() - (int)palette.getPosition().y);
-
-            BeginMode2D(paletteCam);
-
-            palette.update();
-
-            renderer.drawRecLines(palette.getGrid());
-
-            EndMode2D();
-
-        EndScissorMode();
-
-        paintBrush.update();
-        
-        DrawText(std::to_string(GetFPS()).c_str(), 0.0f, 0.0f, 35, PINK);
-
-        if (IsKeyDown(KEY_H))
+        if (IsKeyPressed(KEY_R))
         {
-            help.draw();
+            scene = Scene::MENU;
+        }
+        if (IsKeyPressed(KEY_T))
+        {
+            scene = Scene::EDITOR;
         }
 
-        utilz::movePaletteCam(paletteCam);
-        
+        switch (scene)
+        {
+        case Scene::EDITOR:
+            utilz::drawEditor(worldGrid,palette,renderer,paintBrush,worldCam,paletteCam);
+            break;
+
+        case Scene::MENU:
+            menu.draw();
+            break;
+        }
+
 
         EndDrawing();
     }

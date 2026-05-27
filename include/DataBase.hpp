@@ -1,24 +1,78 @@
 #pragma once 
 
-
 #include <sqlite3.h>
 
-#include <Config.hpp>
+#include "Config.hpp"
+#include "FileExplorer.hpp"
 
 class DataBase
 {
 public:
 	DataBase()
 	{
-		exit = sqlite3_open(std::filesystem::path(Config::savesDir).append("test.db").string().c_str(), &DB);
-		
+
+		//m_pathToDB = m_FileEplr.openExplorer(Config::savesDir.string());
+		//m_Exit = sqlite3_open(m_pathToDB.c_str(), &DB);
+		//if (m_Exit != SQLITE_OK)
+		//{
+		//	std::cout <<  "FATAL ERROR " << sqlite3_errmsg(DB) << "\n";
+		//}
+		//else
+		//{
+		//	std::cout << "Success opened the file at " << m_pathToDB << "\n";
+		//}
+	}
+	~DataBase()
+	{
+		sqlite3_close(DB);
+	}
 
 
+	void fillTable()
+	{
+
+	}
+
+
+	void createTable()
+	{
+		sqlite3_stmt *SQLstmt;
+		std::string SQLcmd("create table if not exists TILES("
+			"id int primary key AUTOINCREMENT"
+			"scRecX int,"
+			"scRecY int,"
+			"scRecW int,"
+			"scRecH int,"
+			"SpriteName text"
+			");");
+
+		m_Exit = sqlite3_prepare_v2(DB, SQLcmd.c_str(), SQLcmd.length(), &SQLstmt, nullptr);
+		sqlite3_step(SQLstmt);
+
+		if (m_Exit != SQLITE_OK)
+		{
+			std::cout << "\n" << sqlite3_errmsg(DB) << "\n";
+		}
+		else
+		{
+			std::cout << "\nTable created!\n";
+		}
+
+		sqlite3_finalize(SQLstmt);
 	}
 
 private:
 
 
-	static sqlite3* DB;
-	int exit = 0;
+
+private:
+	sqlite3* DB;
+
+	std::string m_pathToDB;
+
+	int m_Exit = 0;
+
+	FileExplorer m_FileEplr;
+
+
 };
