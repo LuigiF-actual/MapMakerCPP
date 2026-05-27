@@ -122,7 +122,6 @@ namespace utilz {
 
         paintBrush.update();
 
-        DrawText(std::to_string(GetFPS()).c_str(), 0.0f, 0.0f, 35, GREEN);
 
 
         utilz::movePaletteCam(paletteCam);

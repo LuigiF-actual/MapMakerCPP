@@ -56,23 +56,31 @@ FetchContent_Declare(
     URL "https://github.com/raysan5/raylib/archive/refs/tags/6.0.tar.gz"
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
+FetchContent_MakeAvailable(raylib)
+
+FetchContent_Declare(
+    raygui
+    GIT_REPOSITORY "https://github.com/raysan5/raygui.git"
+    GIT_SHALLOW TRUE 
+)
+
+FetchContent_MakeAvailable(raygui)
 
 FetchContent_Declare(
     tinyfiledialogs
     GIT_REPOSITORY "https://github.com/native-toolkit/libtinyfiledialogs.git"
     SOURCE_DIR tinyfiledialogs
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
+
+FetchContent_MakeAvailable(tinyfiledialogs)
 
 FetchContent_Declare(
     sqlite3
     URL "https://sqlite.org/2026/sqlite-amalgamation-3530100.zip"
     SOURCE_DIR sqlite3 
     URL_HASH SHA3_256=3c07136e4f6b5dd0c395be86455014039597bc65b6851f7111e88f71b6e06114
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
-
-FetchContent_MakeAvailable(raylib tinyfiledialogs sqlite3)
+FetchContent_MakeAvailable(sqlite3)
 
 file(REMOVE_RECURSE ${raylib_SOURCE_DIR}/examples)
 file(REMOVE_RECURSE ${raylib_SOURCE_DIR}/projects)
@@ -106,7 +114,7 @@ target_sources(sqlite3_lib
 
 )
 
-target_link_libraries(MapMakerC++
+target_link_libraries(MapMakerC++ PRIVATE
     raylib
     tinyfiledialogs_lib
     sqlite3_lib
@@ -115,8 +123,10 @@ target_link_libraries(MapMakerC++
 target_include_directories(MapMakerC++ PUBLIC "include")
 target_include_directories(MapMakerC++ PUBLIC "images")
 
+target_include_directories(MapMakerC++ PUBLIC ${raygui_SOURCE_DIR}/src)
 target_include_directories(MapMakerC++ PUBLIC ${tinyfiledialogs_SOURCE_DIR})
 target_include_directories(MapMakerC++ PUBLIC ${sqlite3_SOURCE_DIR})
+
 
 target_compile_definitions(MapMakerC++ PRIVATE
     RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/images/"

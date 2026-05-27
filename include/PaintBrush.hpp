@@ -131,7 +131,7 @@ private:
 		{
 			Tile* p_Tile = m_TileGrid.findTile(GetScreenToWorld2D(m_PlMouse.getMousePos(), m_worldCam));
 
-			if (p_Tile)
+			if (p_Tile && m_SelectedCell)
 			{	
 				//Checks to see if the tile texture is not the same that it will be aplied, if it is it will not be applied
 				if (!((p_Tile->scRec.x == m_SelectedCell->scRec.x) && (p_Tile->scRec.y == m_SelectedCell->scRec.y) && (&m_TexturesPallete.getTexture() == p_Tile->texture)))
@@ -173,24 +173,3 @@ private:
 	PaintMode mode = PaintMode::RECTANGLE;
 };
 
-/*if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-		{
-			begin = Vector2Subtract(GetScreenToWorld2D(GetMousePosition(), m_worldCam), m_TileGrid.offset());
-			m_SelectedCell = m_TexturesPallete.getSelectedCell();
-			std::cout << "Begin " << begin.x << " : " << begin.y << "\n";
-		}
-		if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && m_SelectedCell)
-		{
-			end = Vector2Subtract(GetScreenToWorld2D(GetMousePosition(), m_worldCam), m_TileGrid.offset());
-
-			std::cout << "end " << end.x << " : " << end.y << "\n";
-
-			float beginX = int(std::min(begin.x, end.x));
-			float beginY = int(std::min(begin.y, end.y));
-
-			float endX = int(std::max(begin.x, end.x));
-			float endY = int(std::max(begin.y, end.y));
-
-			begin = { 0.0f };
-			end = { 0.0f };
-}*/

@@ -3,6 +3,10 @@
 #include <iostream>
 
 #include <raylib.h>
+
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
 #include <sqlite3.h>
 #include <tinyfiledialogs.h>
 
@@ -34,8 +38,6 @@ int main(void)
 
     Scene scene = Scene::EDITOR;
 
-    DataBase DB;
-    DB.createTable();
 
     
     Camera2D paletteCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
@@ -45,7 +47,7 @@ int main(void)
     Menu menu;
 
     Camera2D worldCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
-    TileGrid worldGrid(1000, 1000, 64.0f, { -100.0f, -100.0f });
+    TileGrid worldGrid(10, 10, 64.0f, { -100.0f, -100.0f });
     TileRenderer renderer;
 
 
@@ -77,9 +79,11 @@ int main(void)
             break;
 
         case Scene::MENU:
+            menu.setMenu(true);
             menu.draw();
             break;
         }
+        DrawText(std::to_string(GetFPS()).c_str(), 0.0f, 0.0f, 35, GREEN);
 
 
         EndDrawing();
