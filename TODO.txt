@@ -17,4 +17,12 @@
 
 8. make a navbar on top to show FPS current draw mode buttons to pick the draw mode etc...
 
-9. 
+9. 319 clang-tidy warnings! fix it
+9.1 259
+9.2 223
+9.3 199
+9.4 188
+
+10. Unify the tiles sizes to 64.0f
+
+11. Remove offset feature from tilegrid class

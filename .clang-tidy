@@ -1,0 +1,27 @@
+HeaderFilterRegex: '.*'
+ExcludeHeaderFilterRegex: '.*/_deps/.*|.*\\_deps\\.*'
+SystemHeaders: false
+WarningsAsErrors: ''
+Checks: > 
+    bugprone-*,
+    modernize-*,
+    readability-*,
+    -modernize-use-trailing-return-type,
+    -modernize-pass-by-value,
+    -readability-uppercase-literal-suffix,
+    -modernize-use-designated-initializers,
+    -readability-math-missing-parentheses,
+    -bugprone-easily-swappable-parameters,
+    -readability-magic-numbers,
+    -modernize-use-auto,
+    -modernize-avoid-c-arrays,
+    -modernize-use-nodiscard,
+    -readability-simplify-boolean-expr
+
+
+CheckOptions:
+  - key: readability-identifier-naming.PrivateMemberPrefix
+    value: 'm_'
+  - key: readability-identifier-naming.PrivateMemberCase
+    value: 'CamelCase'
+

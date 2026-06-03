@@ -2,10 +2,14 @@
 
 #include <raylib.h>
 #include <raymath.h>
-
+#include <Config.hpp>
 
 
 namespace utilz {
+
+
+
+
 	void movePaletteCam(Camera2D& paletteCamera)
 	{
         static bool isDragging = false;
@@ -21,7 +25,7 @@ namespace utilz {
 
         // Start the drag
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) &&
-            (GetMousePosition().y > ((float)GetScreenHeight() * 70.0f / 100.0f)))
+            (GetMousePosition().y > (static_cast<float>(GetScreenHeight()) * 70.0f / 100.0)))
         {
             isDragging = true;
             dragStartMouse = GetMousePosition();
@@ -48,7 +52,7 @@ namespace utilz {
 
         if (GetMouseWheelMove() != 0)
         {
-            paletteCamera.zoom = expf(logf(paletteCamera.zoom) + ((float)GetMouseWheelMove() * 0.1f));
+            paletteCamera.zoom = expf(logf(paletteCamera.zoom) + (GetMouseWheelMove() * Config::zoomSpd));
         }
 	}
     
@@ -56,28 +60,28 @@ namespace utilz {
     {
         if (IsKeyDown(KEY_W))
         {
-            worldCamera.target.y -= 250.0f * GetFrameTime();
+            worldCamera.target.y -= Config::worldCamMoveSpd * GetFrameTime();
         }
         if (IsKeyDown(KEY_S))
         {
-            worldCamera.target.y += 250.0f * GetFrameTime();
+            worldCamera.target.y += Config::worldCamMoveSpd * GetFrameTime();
         }
         if (IsKeyDown(KEY_D))
         {
-            worldCamera.target.x += 250.0f * GetFrameTime();
+            worldCamera.target.x += Config::worldCamMoveSpd * GetFrameTime();
         }
         if (IsKeyDown(KEY_A))
         {
-            worldCamera.target.x -= 250.0f * GetFrameTime();
+            worldCamera.target.x -= Config::worldCamMoveSpd * GetFrameTime();
         }
         if (IsKeyPressed(KEY_E))
         {
-            worldCamera.zoom = expf(logf(worldCamera.zoom) + (0.1f));
+            worldCamera.zoom = expf(logf(worldCamera.zoom) + Config::zoomSpd);
             std::cout << worldCamera.zoom << "\n";
         }
         if (IsKeyPressed(KEY_Q))
         {
-            worldCamera.zoom = expf(logf(worldCamera.zoom) - (0.1f));
+            worldCamera.zoom = expf(logf(worldCamera.zoom) - Config::zoomSpd);
             std::cout << worldCamera.zoom << "\n";
         }
         if (IsKeyPressed(KEY_X))
@@ -91,7 +95,7 @@ namespace utilz {
 
     void drawEditor(TileGrid& worldGrid, TexturePalette& palette,TileRenderer& renderer,PaintBrush& paintBrush, Camera2D& worldCam, Camera2D& paletteCam)
     {
-        BeginScissorMode(0.0f, 0.0f, (int)GetScreenWidth(), (int)palette.getPosition().y);
+        BeginScissorMode(0, 0, GetScreenWidth(), static_cast<int>(palette.getPosition().y));
 
         BeginMode2D(worldCam);
 
@@ -108,7 +112,7 @@ namespace utilz {
         DrawRectangleRec(palette.getBackground().body, palette.getBackground().color);
 
         //Palette part of the screen
-        BeginScissorMode((int)palette.getPosition().x, (int)palette.getPosition().y, (int)GetScreenWidth(), (int)GetScreenHeight() - (int)palette.getPosition().y);
+        BeginScissorMode(static_cast<int>(palette.getPosition().x), static_cast<int>(palette.getPosition().y), GetScreenWidth(), static_cast<int>(GetScreenHeight() - palette.getPosition().y));
 
         BeginMode2D(paletteCam);
 

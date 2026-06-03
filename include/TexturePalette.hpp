@@ -33,13 +33,13 @@ public:
     void update()
     {
         
-        if(m_Texture)
+        if(m_Texture != nullptr)
         {
-            DrawTexture(*m_Texture, m_AnchorPoint.x, m_AnchorPoint.y, WHITE);
+            DrawTexture(*m_Texture, static_cast<int>(m_AnchorPoint.x), static_cast<int>(m_AnchorPoint.y), WHITE);
         }
         if (IsKeyPressed(KEY_K))
         {
-            std::string tempPath = fileExplorer.openExplorer();
+            std::string tempPath = m_FileExplorer.openExplorer();
             if (!tempPath.empty())
             {
                 tempPath = std::filesystem::path(tempPath).stem().string();
@@ -50,13 +50,13 @@ public:
         if (IsWindowResized())
         {
 
-            m_AnchorPoint.y = GetScreenHeight() - (GetScreenHeight() * (30.0f / 100.0f));
+            m_AnchorPoint.y = static_cast<float>(GetScreenHeight()) - (GetScreenHeight() * (30.0f / 100.0f));
             if (m_AnchorPoint.y != m_PaletteBackGround.body.y)
             {
                 m_ClickCells.setGidPos(m_AnchorPoint);
             }
             m_PaletteBackGround.body.y = m_AnchorPoint.y;
-            m_PaletteBackGround.body.width = GetScreenWidth();
+            m_PaletteBackGround.body.width = static_cast<float>(GetScreenWidth());
 
         }
 
@@ -81,7 +81,7 @@ public:
     {
         Tile* newSelect = m_ClickCells.findTile(GetScreenToWorld2D(GetMousePosition(), m_PaletteCam));
 
-        if (newSelect)
+        if (newSelect != nullptr)
         {
              
             //Checks to see if the seletected tile is on the texture
@@ -92,33 +92,32 @@ public:
             }
 
         
-            if (!m_selectedCell) 
+            //m_SelectedCell always is assigned nullptr upon class initialization
+            //This if is for when the player first clicks the palette grid
+            if (m_SelectedCell == nullptr) 
             {
-                m_selectedCell = newSelect;
-                m_selectedCell->texture = m_Texture;
-                m_selectedCell->borderColor = ORANGE;
+                m_SelectedCell = newSelect;
+                m_SelectedCell->texture = m_Texture;
+                m_SelectedCell->borderColor = ORANGE;
             }
 
-            //If the tile color is not orange that means it was not selected thus I change that here   
-            //There can be only ONE orange bordered tile    
-            if (!(m_selectedCell == newSelect))
+
+            //Avoid useless asigns if the user clicks the same 
+            //cell twice the operation will not be performed
+            if ( m_SelectedCell != newSelect )
             {
-                m_selectedCell->borderColor = BLACK;
-                m_selectedCell = newSelect;
-                m_selectedCell->borderColor = ORANGE;
+                m_SelectedCell->borderColor = BLACK;
+                m_SelectedCell = newSelect;
+                m_SelectedCell->borderColor = ORANGE;
             }
         }
-        return m_selectedCell;
+        return m_SelectedCell;
     }
 
     void setTexture(const Texture2D* texture)
     {
-        std::cout << "Texture Set!" << "\n";
         m_Texture = texture;
-        std::cout << "GridSize" << texture->width / 16 << " : : " << texture->height / 16<< "\n";
-
-        m_TextureSize = { (float)m_Texture->width, (float)m_Texture->height };
-        std::cout << "New texture size" << m_TextureSize.x << " : : " << m_TextureSize.y << "\n";
+        m_TextureSize = { static_cast<float>(m_Texture->width), static_cast<float>(m_Texture->height) };
     }
 
     const Texture2D& getTexture()
@@ -145,7 +144,7 @@ private:
 
     const Texture2D* m_Texture = nullptr;
     Camera2D& m_PaletteCam;
-    Tile* m_selectedCell = nullptr;
+    Tile* m_SelectedCell = nullptr;
 
     Vector2 m_AnchorPoint = { 0.0f , 300.0f };
     Vector2 m_TextureSize = { 0, 0 };
@@ -154,6 +153,6 @@ private:
 
     TileGrid m_ClickCells{ 20, 10, Config::paletteTilesSize ,m_AnchorPoint};
 
-    FileExplorer fileExplorer;
+    FileExplorer m_FileExplorer;
 
 };

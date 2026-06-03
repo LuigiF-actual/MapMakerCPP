@@ -21,11 +21,12 @@ public:
 
     const Texture2D& getTexture(const std::string& name) const
     {
-        return sm_TextureAtlas.at(name);
+        return m_TextureAtlas.at(name);
     }
+
     const Texture2D& getFirstTexture() const
     {
-        return sm_TextureAtlas.begin()->second;
+        return m_TextureAtlas.begin()->second;
     }
 
 private:
@@ -43,7 +44,7 @@ private:
                 {
                     std::string filename = file.path().stem().string();
 
-                    sm_TextureAtlas.emplace(
+                    m_TextureAtlas.emplace(
                         filename,
                         LoadTexture(file.path().string().c_str())
                     );
@@ -57,13 +58,12 @@ private:
 
     ~AtlasManager()
     {
-        for (auto& [name, texture] : sm_TextureAtlas)
+        for (auto& [name, texture] : m_TextureAtlas)
         {
             UnloadTexture(texture);
         }
     }
 
 private:
-
-    std::unordered_map<std::string, Texture2D> sm_TextureAtlas;
+    std::unordered_map<std::string, Texture2D> m_TextureAtlas;
 };

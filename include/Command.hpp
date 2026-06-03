@@ -13,7 +13,7 @@
 class Command
 {
 public:
-	virtual ~Command() {}
+	virtual ~Command() = default;
 	virtual void execute() = 0;
 	virtual void undo() = 0;
 };	
@@ -23,7 +23,7 @@ class PaintTileCmd : public Command
 public:
 	PaintTileCmd(Tile& tile, Rectangle newSourceRec ,const Texture2D* newTexture)
 		: 
-		mp_ChangedTile(&tile),
+		m_PchangedTile(&tile),
 		m_NewTexture(newTexture),
 		m_NewSouceRec(newSourceRec),
 		m_OriginalSourceRec(tile.scRec),
@@ -33,29 +33,29 @@ public:
 
 	void execute() override
 	{
-		if (mp_ChangedTile)
+		if (m_PchangedTile != nullptr)
 		{
-			mp_ChangedTile->texture = m_NewTexture;
-			mp_ChangedTile->scRec = m_NewSouceRec;
+			m_PchangedTile->texture = m_NewTexture;
+			m_PchangedTile->scRec = m_NewSouceRec;
 		}
 	}
 
 	void undo() override
 	{
-		if (mp_ChangedTile)
+		if (m_PchangedTile != nullptr)
 		{
-			mp_ChangedTile->texture = m_OriginalTexture;
-			mp_ChangedTile->scRec = m_OriginalSourceRec;
+			m_PchangedTile->texture = m_OriginalTexture;
+			m_PchangedTile->scRec = m_OriginalSourceRec;
 		}
 	}
 private:
 	const Texture2D* m_OriginalTexture = nullptr;
 	const Texture2D* m_NewTexture = nullptr;
 
-	Rectangle m_NewSouceRec = { 0 };
-	Rectangle m_OriginalSourceRec = { 0 };
+	Rectangle m_NewSouceRec = { 0.0f, 0.0f, 0.0f, 0.0f };
+	Rectangle m_OriginalSourceRec = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-	Tile* mp_ChangedTile = nullptr;
+	Tile* m_PchangedTile = nullptr;
 };
 
 class RectangleFillCmd : public Command
@@ -69,18 +69,18 @@ public:
 		m_NewTexture(newTexture),
 		m_NewSourceRec(newSourceRec)
 	{
-		m_PaintTileVec.reserve(size_t(std::abs(begin.y - end.y)+1) * size_t(std::abs(begin.x - end.x)+1));
+		m_PaintTileVec.reserve(static_cast<size_t>(std::abs(begin.y - end.y)+1) * static_cast<size_t>(std::abs(begin.x - end.x)+1));
 		
 		//std::cout << "Rec total size" << size_t(std::abs(begin.y - end.y)+1) * size_t(std::abs(begin.x - end.x)+1) << "\n";
 
-		for (auto y = int(m_Begin.y ); y < int(m_End.y ) + 1; y++)
+		for (auto yPos = static_cast<int>(m_Begin.y); yPos < static_cast<int>(m_End.y) + 1; yPos++)
 		{
-			for (auto x = int(m_Begin.x); x < int(m_End.x ) + 1; x++)
+			for (auto xPos = static_cast<int>(m_Begin.x); xPos < static_cast<int>(m_End.x ) + 1; xPos++)
 			{
-				if (!(x < 0 || x >= m_TileGrid->cols() || y < 0 || y >= m_TileGrid->rows()))
+				if (!(xPos < 0 || xPos >= m_TileGrid->cols() || yPos < 0 || yPos >= m_TileGrid->rows()))
 				{
 
-					Tile* tile = m_TileGrid->at(x, y);
+					Tile* tile = m_TileGrid->at(xPos, yPos);
 					m_PaintTileVec.emplace_back(std::make_unique<PaintTileCmd>(*tile, m_NewSourceRec, m_NewTexture));
 				}
 			}
@@ -89,9 +89,9 @@ public:
 
 	void execute() override
 	{
-		for (auto& i : m_PaintTileVec)
+		for (auto& tile : m_PaintTileVec)
 		{
-			i->execute();
+			tile->execute();
 		}
 	}
 
@@ -108,11 +108,11 @@ private:
 
 	TileGrid* m_TileGrid;
 
-	Vector2 m_Begin = { 0 };
-	Vector2 m_End = { 0 };
+	Vector2 m_Begin = { 0.0f,0.0f };
+	Vector2 m_End = { 0.0f,0.0f };
 
 	const Texture2D* m_NewTexture = nullptr;
-	Rectangle m_NewSourceRec = { 0 };
+	Rectangle m_NewSourceRec = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 	std::vector<std::unique_ptr<PaintTileCmd>> m_PaintTileVec;
 

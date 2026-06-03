@@ -19,9 +19,9 @@
 #include <FileExplorer.hpp>
 #include <string>
 #include <utilz.hpp>
-#include <HelpScreen.hpp>
 #include <DataBase.hpp>
 #include <Menu.hpp>
+#include <SavesFileManager.hpp>
 
 enum class Scene : unsigned char
 {
@@ -29,20 +29,25 @@ enum class Scene : unsigned char
     EDITOR
 };
 
+static int* nana()
+{
+    return nullptr;
+}
+
 int main(void)
 {
     InitWindow(Config::screenWidth, Config::screenHeight , "MapMakerC++");
 
     SetWindowState(FLAG_WINDOW_RESIZABLE);
     MaximizeWindow();
-
+    SetExitKey(KEY_NULL);
     Scene scene = Scene::EDITOR;
 
 
     
-    Camera2D paletteCam = { {0.0f,0.0f},{0.0f,0.0f},0.0f,1.0f };
+    Camera2D paletteCam = { {0.0F,0.0F},{0.0F,0.0F},0.0F,1.0F };
     TexturePalette palette(&AtlasManager::getInstance().getTexture(Config::default_Atlas.data()), paletteCam);
-    Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, (float)GetScreenWidth(), (float)GetScreenHeight()};
+    Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()) };
 
     Menu menu;
 
@@ -52,8 +57,14 @@ int main(void)
 
 
     PaintBrush paintBrush(worldGrid, palette,paletteCam,worldCam);
-    HelpScreen help;
 
+    SavesFilesManager saveFiles(menu);
+    saveFiles.createSave("superTest");
+
+
+    if (nana() != nullptr) {
+        std::cout << "lol\n";
+    }
 
     while (!WindowShouldClose())   
     {
@@ -63,11 +74,12 @@ int main(void)
         
         //World part of the screen
 
-        if (IsKeyPressed(KEY_R))
+        if (IsKeyPressed(KEY_ESCAPE) && (scene == Scene::EDITOR))
         {
             scene = Scene::MENU;
-        }
-        if (IsKeyPressed(KEY_T))
+            menu.setMenu(true);
+            menu.setMenuState(MenuAction::NONE);
+        } else if (IsKeyPressed(KEY_ESCAPE) && (scene == Scene::MENU))
         {
             scene = Scene::EDITOR;
         }
@@ -79,10 +91,10 @@ int main(void)
             break;
 
         case Scene::MENU:
-            menu.setMenu(true);
-            menu.draw();
+            menu.update();
             break;
         }
+
         DrawText(std::to_string(GetFPS()).c_str(), 0.0f, 0.0f, 35, GREEN);
 
 

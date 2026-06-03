@@ -19,41 +19,37 @@ public:
 			"Select Texture",
 			Config::imagesDir.string().c_str(),
 			2,
-			filtersForFolder,
+			m_FiltersForFolder,
 			"images files",
 			0
 		);
 
-		if(Path)
-		{
-			return std::string(Path);
-		}
-		else
+		if(Path == nullptr)
 		{
 			return "";
 		}
+
+		return std::string(Path);
 	}
 
 
-	std::string openExplorer(std::string_view path)
+	std::string openExplorer(const std::string& path)
 	{
 		const char* Path = tinyfd_openFileDialog(
 			"Select Texture",
-			path.data(),
+			path.c_str(),
 			2,
-			filtersForFolder,
+			m_FiltersForFolder,
 			"images files",
 			0
 		);
 
-		if (Path)
-		{
-			return std::string(Path);
-		}
-		else
+		if (Path == nullptr)
 		{
 			return "";
 		}
+
+		return std::string(Path);
 	}
 
 	std::string saveFile()
@@ -62,22 +58,20 @@ public:
 			"Save file",
 			Config::savesDir.string().c_str(),
 			1,
-			filterForSaves,
+			m_FilterForSaves,
 			"db files"
 		);
 
-		if (Path)
-		{
-			return std::string(Path);
-		}
-		else
+		if (Path == nullptr)
 		{
 			return "";
 		}
+		
+		return std::string(Path);
 	}
 
 
 private:
-	const char* filtersForFolder[2] = { "*.jpg","*.png" };
-	const char* filterForSaves[1] = { "*.db" };
+	const char* m_FiltersForFolder[2] = { "*.jpg","*.png" };
+	const char* m_FilterForSaves[1] = { "*.db" };
 };

@@ -33,8 +33,8 @@ public:
 		: 
 		m_TileGrid(tileGrid),
 		m_TexturesPallete(palette),
-		m_paletteCam(paletteCamera),
-		m_worldCam(worldCamera)
+		m_PaletteCam(paletteCamera),
+		m_WorldCam(worldCamera)
 	{
 	}
 
@@ -54,21 +54,23 @@ private:
 		switch (key)
 		{
 		case KEY_B:
-			mode = PaintMode::NORMAL;
+			m_Mode = PaintMode::NORMAL;
 			break;
 		case KEY_U:
-			mode = PaintMode::RECTANGLE;
+			m_Mode = PaintMode::RECTANGLE;
+			break;
+		default:
 			break;
 		}
 
-		if (keyboard.ctrlZ())
+		if (m_Keyboard.ctrlZ())
 		{
-			cmd.undo();
+			m_Cmd.undo();
 			
 		}
-		if (keyboard.ctrlY())
+		if (m_Keyboard.ctrlY())
 		{
-			cmd.redo();
+			m_Cmd.redo();
 		}
 	}
 
@@ -82,7 +84,7 @@ private:
 		}
 		else 
 		{
-			switch (mode)
+			switch (m_Mode)
 			{
 			case PaintMode::RECTANGLE:
 				rectangleFill();
@@ -100,28 +102,24 @@ private:
 	{
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 		{
-			begin = Vector2Subtract(GetScreenToWorld2D(GetMousePosition(), m_worldCam), m_TileGrid.offset());
-			std::cout << "Begin " << begin.x << " : " << begin.y << "\n";
+			m_Begin = Vector2Subtract(GetScreenToWorld2D(GetMousePosition(), m_WorldCam), m_TileGrid.offset());
 		}
-		if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && m_SelectedCell)
+		if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && (m_SelectedCell != nullptr))
 		{
-			end = Vector2Subtract(GetScreenToWorld2D(GetMousePosition(), m_worldCam), m_TileGrid.offset());
+			m_End = Vector2Subtract(GetScreenToWorld2D(GetMousePosition(), m_WorldCam), m_TileGrid.offset());
 
-			std::cout << "end " << end.x << " : " << end.y << "\n";
 
-			float beginX = int(std::min(begin.x, end.x) / Config::tileSize);
-			float beginY = int(std::min(begin.y, end.y) / Config::tileSize) ;
+			float beginX = static_cast<float>(std::min(m_Begin.x, m_End.x) / Config::tileSize);
+			float beginY = static_cast<float>(std::min(m_Begin.y, m_End.y) / Config::tileSize) ;
 
-			float endX = int(std::max(begin.x, end.x) / Config::tileSize);
-			float endY = int(std::max(begin.y, end.y) / Config::tileSize);
-
-			Tile* tileOld = m_TileGrid.at(beginX, beginY);
+			float endX = static_cast<float>(std::max(m_Begin.x, m_End.x) / Config::tileSize);
+			float endY = static_cast<float>(std::max(m_Begin.y, m_End.y) / Config::tileSize);
 
 			auto fillRec = std::make_unique<RectangleFillCmd>(m_TileGrid, Vector2{ beginX,beginY }, Vector2{ endX, endY }, m_SelectedCell->scRec, &m_TexturesPallete.getTexture());
-			cmd.execute(std::move(fillRec));
+			m_Cmd.execute(std::move(fillRec));
 
-			begin = { 0.0f };
-			end = { 0.0f };
+			m_Begin = { 0.0f,0.0f };
+			m_End = { 0.0f,0.0f };
 		}
 	}
 
@@ -129,15 +127,17 @@ private:
 	{
 		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 		{
-			Tile* p_Tile = m_TileGrid.findTile(GetScreenToWorld2D(m_PlMouse.getMousePos(), m_worldCam));
+			Tile* p_Tile = m_TileGrid.findTile(GetScreenToWorld2D(m_PlMouse.getMousePos(), m_WorldCam));
 
-			if (p_Tile && m_SelectedCell)
+			if ((p_Tile != nullptr) && (m_SelectedCell != nullptr))
 			{	
 				//Checks to see if the tile texture is not the same that it will be aplied, if it is it will not be applied
-				if (!((p_Tile->scRec.x == m_SelectedCell->scRec.x) && (p_Tile->scRec.y == m_SelectedCell->scRec.y) && (&m_TexturesPallete.getTexture() == p_Tile->texture)))
+				if (p_Tile->scRec.x != m_SelectedCell->scRec.x ||
+					p_Tile->scRec.y != m_SelectedCell->scRec.y ||
+					&m_TexturesPallete.getTexture() != p_Tile->texture)
 				{
 					auto paintCmd = std::make_unique<PaintTileCmd>(*p_Tile, m_SelectedCell->scRec, &m_TexturesPallete.getTexture());
-					cmd.execute(std::move(paintCmd));
+					m_Cmd.execute(std::move(paintCmd));
 				}
 			}
 		}
@@ -153,23 +153,23 @@ private:
 
 private:
 
-	Vector2 begin = { 0 };
-	Vector2 end = { 0 };
+	Vector2 m_Begin = { 0.0f, 0.0f };
+	Vector2 m_End = { 0.0f, 0.0f };
 
 
 	TileGrid& m_TileGrid;
 	TexturePalette& m_TexturesPallete;
-	Camera2D& m_paletteCam;
-	Camera2D& m_worldCam;
+	Camera2D& m_PaletteCam;
+	Camera2D& m_WorldCam;
 
 	PlayerMouse m_PlMouse;
-	KeyboardManager keyboard;
+	KeyboardManager m_Keyboard;
 
 	Tile* m_SelectedCell = nullptr;
 
 
-	CommandManager cmd;
+	CommandManager m_Cmd;
 
-	PaintMode mode = PaintMode::RECTANGLE;
+	PaintMode m_Mode = PaintMode::RECTANGLE;
 };
 

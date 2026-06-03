@@ -24,7 +24,7 @@ public:
 	}
 	~DataBase()
 	{
-		sqlite3_close(DB);
+		sqlite3_close(m_DB);
 	}
 
 
@@ -46,12 +46,12 @@ public:
 			"SpriteName text"
 			");");
 
-		m_Exit = sqlite3_prepare_v2(DB, SQLcmd.c_str(), SQLcmd.length(), &SQLstmt, nullptr);
+		m_Exit = sqlite3_prepare_v2(m_DB, SQLcmd.c_str(), static_cast<int>(SQLcmd.length()), &SQLstmt, nullptr);
 		sqlite3_step(SQLstmt);
 
 		if (m_Exit != SQLITE_OK)
 		{
-			std::cout << "\n" << sqlite3_errmsg(DB) << "\n";
+			std::cout << "\n" << sqlite3_errmsg(m_DB) << "\n";
 		}
 		else
 		{
@@ -66,7 +66,7 @@ private:
 
 
 private:
-	sqlite3* DB;
+	sqlite3* m_DB;
 
 	std::string m_pathToDB;
 

@@ -27,8 +27,8 @@ public:
 	Vector2 MousePos2AtlasPos(Vector2 atlasPos)
 	{
 		Vector2 AtlasPos = {
-			float(int((getMousePos().x - atlasPos.x) / Config::paletteTextureScale / 16) * 16),
-			float(int((getMousePos().y - atlasPos.y) / Config::paletteTextureScale / 16) * 16)
+			static_cast<float>(static_cast<int>((getMousePos().x - atlasPos.x) / Config::paletteTextureScale / Config::textureTileSize) * Config::textureTileSize),
+			static_cast<float>(static_cast<int>((getMousePos().y - atlasPos.y) / Config::paletteTextureScale / Config::textureTileSize) * Config::textureTileSize)
 		};
 
 		return AtlasPos;

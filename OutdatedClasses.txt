@@ -32,15 +32,18 @@ private:
 
 	const Texture2D* sprite = &AtlasManager::getInstance().getTexture("HelpMenu");
 
-	Rectangle m_ScRec = { 0.0f,0.0f,(float)sprite->width,(float)sprite->height };
+	Rectangle m_ScRec = { 0.0f,0.0f,static_cast<float>(sprite->width),static_cast<float>(sprite->height) };
 
 	Rectangle m_Body ={ 0.0f,0.0f,GetScreenWidth() * 50.0f / 100,GetScreenHeight() * 50.0f / 100 };
-	std::string helpText = (
+	std::string m_HelpText =
 		"CTRL+Z UNDO \t CTRL+Y REDO \n"
 		"\n'U' for rectangle tool\n"
 		"\n'I' for picking a cell from the atlas\n"
-		"\n'B' for painting normal\n"
-	);
+		"\n'B' for painting normal\n";
+	
 
 
 };
+
+
+==================================================================

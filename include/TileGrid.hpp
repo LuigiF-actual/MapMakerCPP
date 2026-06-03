@@ -19,7 +19,7 @@ struct Tile
 class TileGrid
 {
 public:
-	TileGrid(size_t columnNums, size_t rowNums, float tileSize, Vector2 gridOffSet)
+	TileGrid(int columnNums, int rowNums, float tileSize, Vector2 gridOffSet)
 		: 
 		m_Cols(columnNums),
 		m_Rows(rowNums),
@@ -27,20 +27,20 @@ public:
 		m_GridOffSet(gridOffSet)
 	{
 
-		for (size_t row = 0; row < m_Rows; row++)
+		for (int row = 0; row < m_Rows; row++)
 		{
-			for (size_t column = 0; column < m_Cols; column++)
+			for (int column = 0; column < m_Cols; column++)
 			{
 				m_TileGrid.emplace_back(
 					Tile{
 						&AtlasManager::getInstance().getTexture(Config::default_Atlas.data()),
 						Rectangle{
-							(float)column * m_TileSize + m_GridOffSet.x,
-							(float)row * m_TileSize + m_GridOffSet.y,
+							static_cast<float>(column)* m_TileSize + m_GridOffSet.x,
+							static_cast<float>(row)* m_TileSize + m_GridOffSet.y,
 							m_TileSize,
 							m_TileSize
 						},
-						Rectangle{0.0f, 0.0f, 16.0f, 16.0f}
+						Rectangle{0.0f, 0.0f, Config::paletteTilesSize, Config::paletteTilesSize}
 					}
 				);
 			}
@@ -72,16 +72,16 @@ public:
 		return nullptr;
 	}
 
-	Vector2 getGridSize()
+	[[nodiscard]] Vector2 getGridSize() const
 	{
-		return Vector2{ (float)m_Cols, (float)m_Rows };
+		return Vector2{ static_cast<float>(m_Cols), static_cast<float>(m_Rows) };
 	}
 	
 	void setGidPos(Vector2 newPos)
 	{
-		for (size_t row = 0; row < m_Rows; row++)
+		for (int row = 0; row < m_Rows; row++)
 		{
-			for (size_t column = 0; column < m_Cols; column++)
+			for (int column = 0; column < m_Cols; column++)
 			{
 				m_TileGrid[row * m_Cols + column].body.x = column * m_TileSize + newPos.x;
 				m_TileGrid[row * m_Cols + column].body.y = row * m_TileSize + newPos.y;
@@ -91,9 +91,9 @@ public:
 
 	void resetScRecs()
 	{
-		for (size_t row = 0; row < m_Rows; row++)
+		for (int row = 0; row < m_Rows; row++)
 		{
-			for (size_t column = 0; column < m_Cols; column++)
+			for (int column = 0; column < m_Cols; column++)
 			{
 				m_TileGrid[row * m_Cols + column].scRec.x = column * m_TileSize;
 				m_TileGrid[row * m_Cols + column].scRec.y = row * m_TileSize;
@@ -101,17 +101,18 @@ public:
 		}
 	}
 
-	Vector2 offset() const { return m_GridOffSet; }
+	[[nodiscard]] Vector2 offset() const { return m_GridOffSet; }
 
-	int cols() const { return m_Cols; }
+	[[nodiscard]] int cols() const { return m_Cols; }
 
-	int rows() const { return m_Rows; }
+	[[nodiscard]] int rows() const { return m_Rows; }
 
 private:
 
-	int m_Cols, m_Rows;
+	int m_Cols = 1;
+	int m_Rows = 1;
 	
-	float m_TileSize = 32.0f;
+	float m_TileSize = Config::tileSize;
 
 	Vector2 m_GridOffSet;
 
@@ -127,16 +128,16 @@ public:
 	void draw(TileGrid& mp_GridToDraw, Camera2D& camera) const
 	{
 		Vector2 windowStart = GetScreenToWorld2D(mp_GridToDraw.offset(), camera);
-		Vector2 windowEnd = GetScreenToWorld2D(Vector2{ float(GetScreenWidth()), float(GetScreenHeight()) }, camera);
+		Vector2 windowEnd = GetScreenToWorld2D(Vector2{ static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()) }, camera);
 
-		for (auto y = int(windowStart.y / Config::tileSize); y < int(windowEnd.y / Config::tileSize) + 1; y++)
+		for (auto yPos = static_cast<int>(windowStart.y / Config::tileSize); yPos < static_cast<int>(windowEnd.y / Config::tileSize) + 1; yPos++)
 		{
-			for (auto x = int(windowStart.x / Config::tileSize); x < int(windowEnd.x / Config::tileSize) + Config::tileSize; x++)
+			for (auto xPos = static_cast<int>(windowStart.x / Config::tileSize); xPos < static_cast<int>(windowEnd.x / Config::tileSize) + Config::tileSize; xPos++)
 			{
-				if ( ! (x < 0 || x >= mp_GridToDraw.cols() || y < 0 || y >= mp_GridToDraw.rows()))
+				if ( ! (xPos < 0 || xPos >= mp_GridToDraw.cols() || yPos < 0 || yPos >= mp_GridToDraw.rows()))
 				{
 
-					Tile* tile = mp_GridToDraw.at(x, y);
+					Tile* tile = mp_GridToDraw.at(xPos, yPos);
 					DrawTexturePro(
 						*tile->texture,
 						tile->scRec,
