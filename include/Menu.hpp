@@ -4,6 +4,7 @@
 #include <string>
 
 #include <raylib.h>
+#include <raygui.h>
 
 enum class MenuAction : unsigned char
 {
@@ -40,11 +41,22 @@ public:
 		if (result == 0)
 		{
 			GuiLabel(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y+30,m_WinBoxBody.width,120.0f }, "Project Name");
-			if (GuiTextBox(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 + 30,m_WinBoxBody.width,120.0f }, m_Config.projectName, 15, m_VariableCMode)) m_VariableCMode = !m_VariableCMode;
+			if (GuiTextBox(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 + 30,m_WinBoxBody.width,120.0f }, m_Config.projectName, 15, m_VariableCMode) == 1) 
+			{
+				m_VariableCMode = !m_VariableCMode;
+			}
+
 			GuiLabel(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 2 + 30,m_WinBoxBody.width,120.0f }, "Grid Width");
-			if (GuiValueBox(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 3 + 30,m_WinBoxBody.width,120.0f }, " ", &m_Config.gridWidth, 1, 1'000, m_VariableAMode)) m_VariableAMode = !m_VariableAMode;
+			if (GuiValueBox(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 3 + 30,m_WinBoxBody.width,120.0f }, " ", &m_Config.gridWidth, 1, 1'000, m_VariableAMode) == 1) 
+			{
+				m_VariableAMode = !m_VariableAMode;
+			}
+
 			GuiLabel(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 4 + 30,m_WinBoxBody.width,120.0f }, "Grid Height");
-			if (GuiValueBox(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 5 + 30,m_WinBoxBody.width,120.0f }, " ", &m_Config.gridHeight, 1, 1'000, m_VariableBMode)) m_VariableBMode = !m_VariableBMode;
+			if (GuiValueBox(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 5 + 30,m_WinBoxBody.width,120.0f }, " ", &m_Config.gridHeight, 1, 1'000, m_VariableBMode) == 1) 
+			{
+				m_VariableBMode = !m_VariableBMode;
+			}
 		}
 		else {
 			m_MenuState = MenuAction::NONE;
@@ -120,6 +132,12 @@ public:
 		case MenuAction::NEW_PROJECT:
 			DrawRectangle(0.0f, 0.0f, GetScreenWidth(), GetScreenHeight(), Color{ 70,130,180,255 });
 			m_NewProject.draw();
+			break;
+		case MenuAction::OPEN_PROJECT:
+			break;
+		case MenuAction::SAVE_PROJECT:
+			break;
+		case MenuAction::SEND_FORM:
 			break;
 		}
 

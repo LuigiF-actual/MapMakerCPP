@@ -10,8 +10,7 @@ public:
 	{
 		if (IsKeyDown(KEY_LEFT_CONTROL))
 		{
-			if (IsKeyPressed(KEY_Z))
-				return true;
+			if (IsKeyPressed(KEY_Z)) return true;
 		}
 		return false;
 	}
@@ -20,8 +19,7 @@ public:
 	{
 		if (IsKeyDown(KEY_LEFT_CONTROL))
 		{
-			if (IsKeyPressed(KEY_Y))
-				return true;
+			if (IsKeyPressed(KEY_Y)) return true;
 		}
 		return false;
 	}

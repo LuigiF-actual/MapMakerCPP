@@ -8,20 +8,20 @@
 class DataBase
 {
 public:
-	DataBase()
-	{
+	DataBase() = default;
+	//{
 
-		//m_pathToDB = m_FileEplr.openExplorer(Config::savesDir.string());
-		//m_Exit = sqlite3_open(m_pathToDB.c_str(), &DB);
+		//m_PathToDB = m_FileEplr.openExplorer(Config::savesDir.string());
+		//m_Exit = sqlite3_open(m_PathToDB.c_str(), &DB);
 		//if (m_Exit != SQLITE_OK)
 		//{
 		//	std::cout <<  "FATAL ERROR " << sqlite3_errmsg(DB) << "\n";
 		//}
 		//else
 		//{
-		//	std::cout << "Success opened the file at " << m_pathToDB << "\n";
+		//	std::cout << "Success opened the file at " << m_PathToDB << "\n";
 		//}
-	}
+	//}
 	~DataBase()
 	{
 		sqlite3_close(m_DB);
@@ -62,13 +62,9 @@ public:
 	}
 
 private:
-
-
-
-private:
 	sqlite3* m_DB;
 
-	std::string m_pathToDB;
+	std::string m_PathToDB;
 
 	int m_Exit = 0;
 

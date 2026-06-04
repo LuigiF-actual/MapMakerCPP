@@ -47,3 +47,6 @@ private:
 
 
 ==================================================================
+
+
+//Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()) };

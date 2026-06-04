@@ -22,7 +22,13 @@
 9.2 223
 9.3 199
 9.4 188
+9.5 80
+9.6 59
+9.7 57
+9.8 46
 
 10. Unify the tiles sizes to 64.0f
 
 11. Remove offset feature from tilegrid class
+
+

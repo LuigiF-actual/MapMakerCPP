@@ -20,7 +20,7 @@ public:
 	void createSave(std::string_view saveName)
 	{
 
-		std::filesystem::path pathToSave = std::filesystem::path(Config::savesDir).append(saveName);
+		std::filesystem::path pathToSave = std::filesystem::path(Config::getSavesDir()).append(saveName);
 		if (!std::filesystem::is_directory(pathToSave.string()))
 		{
 

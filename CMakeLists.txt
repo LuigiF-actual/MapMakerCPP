@@ -22,6 +22,7 @@ find_program(CLANG_FORMAT clang-format)
 add_executable(MapMakerC++ 
     ${HEADER_FILES}
     "source/main.cpp"
+    "source/raygui_impl.cpp"
 )
 
 find_program(CLANG_TIDY_EXE NAMES clang-tidy)
@@ -83,6 +84,7 @@ FetchContent_Declare(
     raygui
     GIT_REPOSITORY "https://github.com/raysan5/raygui.git"
     GIT_SHALLOW TRUE 
+    SYSTEM
 )
 
 FetchContent_MakeAvailable(raygui)
@@ -151,9 +153,9 @@ target_link_libraries(MapMakerC++ PRIVATE
 target_include_directories(MapMakerC++ PUBLIC "include")
 target_include_directories(MapMakerC++ PUBLIC "images")
 
-target_include_directories(MapMakerC++ PUBLIC ${raygui_SOURCE_DIR}/src)
-target_include_directories(MapMakerC++ PUBLIC ${tinyfiledialogs_SOURCE_DIR})
-target_include_directories(MapMakerC++ PUBLIC ${sqlite3_SOURCE_DIR})
+target_include_directories(MapMakerC++ SYSTEM PUBLIC ${raygui_SOURCE_DIR}/src)
+target_include_directories(MapMakerC++ SYSTEM PUBLIC ${tinyfiledialogs_SOURCE_DIR})
+target_include_directories(MapMakerC++ SYSTEM PUBLIC ${sqlite3_SOURCE_DIR})
 
 
 target_compile_definitions(MapMakerC++ PRIVATE
@@ -162,4 +164,10 @@ target_compile_definitions(MapMakerC++ PRIVATE
 
 target_compile_definitions(MapMakerC++ PRIVATE
     SAVES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/saves/"
+)
+
+set_source_files_properties(
+    source/raygui_impl.cpp
+    PROPERTIES
+    COMPILE_OPTIONS "/analyze-"
 )

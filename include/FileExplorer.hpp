@@ -10,14 +10,14 @@ class FileExplorer
 public:
 	FileExplorer()
 	{
-		std::cout << Config::imagesDir.string().c_str() << "\n";
+		std::cout << Config::getImagesDir().string().c_str() << "\n";
 	}
 
 	std::string openExplorer()
 	{
 		const char* Path = tinyfd_openFileDialog( 
 			"Select Texture",
-			Config::imagesDir.string().c_str(),
+			Config::getImagesDir().string().c_str(),
 			2,
 			m_FiltersForFolder,
 			"images files",
@@ -29,7 +29,8 @@ public:
 			return "";
 		}
 
-		return std::string(Path);
+
+		return { Path };
 	}
 
 
@@ -49,14 +50,14 @@ public:
 			return "";
 		}
 
-		return std::string(Path);
+		return { Path };
 	}
 
 	std::string saveFile()
 	{
 		const char* Path = tinyfd_saveFileDialog(
 			"Save file",
-			Config::savesDir.string().c_str(),
+			Config::getSavesDir().string().c_str(),
 			1,
 			m_FilterForSaves,
 			"db files"
@@ -67,7 +68,7 @@ public:
 			return "";
 		}
 		
-		return std::string(Path);
+		return {Path};
 	}
 
 

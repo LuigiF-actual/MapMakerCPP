@@ -4,8 +4,6 @@
 
 #include <raylib.h>
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
 
 #include <sqlite3.h>
 #include <tinyfiledialogs.h>
@@ -46,8 +44,8 @@ int main(void)
 
     
     Camera2D paletteCam = { {0.0F,0.0F},{0.0F,0.0F},0.0F,1.0F };
-    TexturePalette palette(&AtlasManager::getInstance().getTexture(Config::default_Atlas.data()), paletteCam);
-    Rectangle paletteCamBounds = { palette.getPosition().x, palette.getPosition().y, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()) };
+    TexturePalette palette(&AtlasManager::getInstance().getTexture(Config::default_Atlas), paletteCam);
+
 
     Menu menu;
 
@@ -55,8 +53,7 @@ int main(void)
     TileGrid worldGrid(10, 10, 64.0f, { -100.0f, -100.0f });
     TileRenderer renderer;
 
-
-    PaintBrush paintBrush(worldGrid, palette,paletteCam,worldCam);
+    PaintBrush paintBrush(worldGrid,palette,worldCam);
 
     SavesFilesManager saveFiles(menu);
     saveFiles.createSave("superTest");

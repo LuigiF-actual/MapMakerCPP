@@ -29,11 +29,10 @@ class PaintBrush
 {
 
 public:
-	PaintBrush(TileGrid& tileGrid,TexturePalette& palette,Camera2D& paletteCamera,Camera2D& worldCamera)
+	PaintBrush(TileGrid& tileGrid,TexturePalette& palette,Camera2D& worldCamera)
 		: 
 		m_TileGrid(tileGrid),
 		m_TexturesPallete(palette),
-		m_PaletteCam(paletteCamera),
 		m_WorldCam(worldCamera)
 	{
 	}
@@ -159,7 +158,6 @@ private:
 
 	TileGrid& m_TileGrid;
 	TexturePalette& m_TexturesPallete;
-	Camera2D& m_PaletteCam;
 	Camera2D& m_WorldCam;
 
 	PlayerMouse m_PlMouse;
