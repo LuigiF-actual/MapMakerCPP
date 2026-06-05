@@ -1,9 +1,12 @@
 #pragma once 
 
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <filesystem>
 #include <fstream>
+#include <ranges>
+#include <raylib.h>
 
 #include "Menu.hpp"
 
@@ -12,7 +15,7 @@
 class SavesFilesManager
 {
 public:
-	SavesFilesManager(Menu menu)
+	SavesFilesManager(Menu& menu)
 		:
 		m_Menu(menu)
 	{};
@@ -25,16 +28,26 @@ public:
 		{
 
 			std::filesystem::create_directory(pathToSave);
-			
-			std::ofstream Files(std::filesystem::path(pathToSave).append(std::string(saveName)+".db"));
-			Files.close();
-
-			Files.open(std::filesystem::path(pathToSave).append(std::string(saveName)+".json"));
-			Files.close();
-
-
-
+			createFile(pathToSave, saveName,".json");
+			createFile(pathToSave, saveName,".db");
 		}
+	}
+
+	void update()
+	{
+		switch (m_Menu.getMenuState())
+		{
+		case MenuAction::SEND_FORM:
+			break;
+		}
+	}
+
+private:
+
+	void createFile(std::filesystem::path filePath, const std::string_view fileName,const std::string_view suffix)
+	{
+		std::ofstream File(filePath.append(std::string(fileName) + std::string(suffix)));
+		File.close();
 	}
 
 private:
@@ -42,3 +55,9 @@ private:
 	Menu& m_Menu;
 };
 
+
+//std::ofstream Files(std::filesystem::path(pathToSave).append(std::string(saveName)+".db"));
+//Files.close();
+//
+//Files.open(std::filesystem::path(pathToSave).append(std::string(saveName)+".json"));
+//Files.close();

@@ -81,11 +81,9 @@ private:
 class OpenProject_UI
 {
 public:
-	OpenProject_UI()
-	{}
+	OpenProject_UI() = default;
 
-	~OpenProject_UI()
-	{}
+	~OpenProject_UI() = default;
 
 private:
 
@@ -107,7 +105,7 @@ public:
 			m_ButtonW = GetScreenWidth() * 15 / 100.0f;
 			m_MarginLeft = (GetScreenWidth() / 2.0f) - m_ButtonW / 2.0f;
 			m_MarginTop = GetScreenHeight() * 25 / 100.0f;
-			GuiSetStyle(DEFAULT, TEXT_SIZE, m_ButtonH * 25 / 100);
+			GuiSetStyle(DEFAULT, TEXT_SIZE, m_ButtonH * 25.0f / 100);
 			m_MenuOpened = false;
 		}
 
@@ -134,10 +132,13 @@ public:
 			m_NewProject.draw();
 			break;
 		case MenuAction::OPEN_PROJECT:
+			std::cout << "open\n";
 			break;
 		case MenuAction::SAVE_PROJECT:
+			std::cout << "save\n";
 			break;
 		case MenuAction::SEND_FORM:
+			std::cout << "send\n";
 			break;
 		}
 

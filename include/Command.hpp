@@ -23,11 +23,11 @@ class PaintTileCmd : public Command
 public:
 	PaintTileCmd(Tile& tile, Rectangle newSourceRec ,const Texture2D* newTexture)
 		: 
-		m_PchangedTile(&tile),
+		m_OriginalTexture(tile.texture),
 		m_NewTexture(newTexture),
 		m_NewSouceRec(newSourceRec),
 		m_OriginalSourceRec(tile.scRec),
-		m_OriginalTexture(tile.texture)
+		m_PchangedTile(&tile)
 	{
 	}
 
@@ -70,8 +70,6 @@ public:
 		m_NewSourceRec(newSourceRec)
 	{
 		m_PaintTileVec.reserve(static_cast<size_t>(std::abs(begin.y - end.y)+1) * static_cast<size_t>(std::abs(begin.x - end.x)+1));
-		
-		//std::cout << "Rec total size" << size_t(std::abs(begin.y - end.y)+1) * size_t(std::abs(begin.x - end.x)+1) << "\n";
 
 		for (auto yPos = static_cast<int>(m_Begin.y); yPos < static_cast<int>(m_End.y) + 1; yPos++)
 		{

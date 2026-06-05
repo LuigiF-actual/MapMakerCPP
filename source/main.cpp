@@ -32,7 +32,7 @@ static int* nana()
     return nullptr;
 }
 
-int main(void)
+int main()
 {
     InitWindow(Config::screenWidth, Config::screenHeight , "MapMakerC++");
 
@@ -44,8 +44,7 @@ int main(void)
 
     
     Camera2D paletteCam = { {0.0F,0.0F},{0.0F,0.0F},0.0F,1.0F };
-    TexturePalette palette(&AtlasManager::getInstance().getTexture(Config::default_Atlas), paletteCam);
-
+    TexturePalette palette(&AtlasManager::getInstance().getTexture(Config::getDefault_Atlas()), paletteCam);
 
     Menu menu;
 

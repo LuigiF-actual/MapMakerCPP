@@ -65,5 +65,6 @@ private:
     }
 
 private:
+
     std::unordered_map<std::string, Texture2D> m_TextureAtlas;
 };
