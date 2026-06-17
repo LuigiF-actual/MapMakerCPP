@@ -17,7 +17,9 @@ Checks: >
     -modernize-avoid-c-arrays,
     -modernize-use-nodiscard,
     -readability-simplify-boolean-expr,
-    -readability-redundant-access-specifiers
+    -readability-redundant-access-specifiers,
+    -readability-convert-member-functions-to-static,
+    -readability-identifier-length
 
 
 
@@ -26,4 +28,5 @@ CheckOptions:
     value: 'm_'
   - key: readability-identifier-naming.PrivateMemberCase
     value: 'CamelCase'
+
 

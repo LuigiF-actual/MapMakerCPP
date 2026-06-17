@@ -6,7 +6,7 @@
 
 #include <raylib.h>
 #include "TileGrid.hpp"
-#include "AtlasDictionary.hpp"
+#include "AtlasManager.hpp"
 #include "Config.hpp"
 
 
@@ -16,20 +16,19 @@ public:
 	virtual ~Command() = default;
 	virtual void execute() = 0;
 	virtual void undo() = 0;
-};	
+};
 
 class PaintTileCmd : public Command
 {
 public:
-	PaintTileCmd(Tile& tile, Rectangle newSourceRec ,const Texture2D* newTexture)
-		: 
+	PaintTileCmd(Tile& tile, Rectangle newSourceRec, const Texture2D* newTexture)
+		:
 		m_OriginalTexture(tile.texture),
 		m_NewTexture(newTexture),
 		m_NewSouceRec(newSourceRec),
 		m_OriginalSourceRec(tile.scRec),
 		m_PchangedTile(&tile)
-	{
-	}
+	{}
 
 	void execute() override
 	{
@@ -61,7 +60,7 @@ private:
 class RectangleFillCmd : public Command
 {
 public:
-	RectangleFillCmd(TileGrid& TileVec,Vector2 begin, Vector2 end, Rectangle newSourceRec, const Texture2D* newTexture)
+	RectangleFillCmd(TileGrid& TileVec, Vector2 begin, Vector2 end, Rectangle newSourceRec, const Texture2D* newTexture)
 		:
 		m_TileGrid(&TileVec),
 		m_Begin(begin),
@@ -69,11 +68,11 @@ public:
 		m_NewTexture(newTexture),
 		m_NewSourceRec(newSourceRec)
 	{
-		m_PaintTileVec.reserve(static_cast<size_t>(std::abs(begin.y - end.y)+1) * static_cast<size_t>(std::abs(begin.x - end.x)+1));
+		m_PaintTileVec.reserve(static_cast<size_t>(std::abs(begin.y - end.y) + 1) * static_cast<size_t>(std::abs(begin.x - end.x) + 1));
 
 		for (auto yPos = static_cast<int>(m_Begin.y); yPos < static_cast<int>(m_End.y) + 1; yPos++)
 		{
-			for (auto xPos = static_cast<int>(m_Begin.x); xPos < static_cast<int>(m_End.x ) + 1; xPos++)
+			for (auto xPos = static_cast<int>(m_Begin.x); xPos < static_cast<int>(m_End.x) + 1; xPos++)
 			{
 				if (!(xPos < 0 || xPos >= m_TileGrid->cols() || yPos < 0 || yPos >= m_TileGrid->rows()))
 				{

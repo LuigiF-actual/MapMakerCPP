@@ -13,9 +13,9 @@ public:
 		std::cout << Config::getImagesDir().string().c_str() << "\n";
 	}
 
-	std::string openExplorer()
+	std::string openExplorer() const
 	{
-		const char* Path = tinyfd_openFileDialog( 
+		const char* Path = tinyfd_openFileDialog(
 			"Select Texture",
 			Config::getImagesDir().string().c_str(),
 			2,
@@ -24,7 +24,7 @@ public:
 			0
 		);
 
-		if(Path == nullptr)
+		if (Path == nullptr)
 		{
 			return "";
 		}
@@ -34,7 +34,7 @@ public:
 	}
 
 
-	std::string openExplorer(const std::string& path)
+	std::string openExplorerEx(const std::string& path) const
 	{
 		const char* Path = tinyfd_openFileDialog(
 			"Select Texture",
@@ -53,7 +53,7 @@ public:
 		return { Path };
 	}
 
-	std::string saveFile()
+	std::string saveFile() const
 	{
 		const char* Path = tinyfd_saveFileDialog(
 			"Save file",
@@ -67,8 +67,8 @@ public:
 		{
 			return "";
 		}
-		
-		return {Path};
+
+		return { Path };
 	}
 
 

@@ -1,11 +1,12 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 #include <unordered_map>
 #include <filesystem>
 
-#include <raylib.h>
-
+#include "raylib.h"
+#include "Core/Application.h"
 
 class AtlasManager
 {
@@ -29,12 +30,30 @@ public:
         return m_TextureAtlas.begin()->second;
     }
 
+    const std::string& getTextureName(const Texture2D* tex) const
+    {
+        //If the texture is not found on the atlas for some reason it will use the default GrassComplete 
+        static std::string lastResource = "GrassComplete";
+
+        for (const auto& [name, texture] : m_TextureAtlas)
+        {
+            if (texture.id == tex->id)
+            {
+                return name;
+            }
+        }
+
+        Core::Application::Get().GetWarningManager().messageBox("Fatal", "A texture was not found, make sure all your textures are in the texture folder", "ok", "error", 0);
+
+        return lastResource;
+    }
+
 private:
     /* data */
     AtlasManager()
     {
 
-        std::filesystem::path TexturesDirPath = RESOURCES_PATH; //cool trick
+        std::filesystem::path TexturesDirPath = std::string(TEXTURES_PATH); //cool trick
 
         if (std::filesystem::is_directory(TexturesDirPath))
         {
@@ -49,7 +68,7 @@ private:
                         LoadTexture(file.path().string().c_str())
                     );
 
- 
+
                 }
             }
         }
