@@ -41,12 +41,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(sqlite3)
 
-FetchContent_Declare(
-    json 
-    GIT_REPOSITORY "https://github.com/nlohmann/json.git"
-    GIT_SHALLOW TRUE
-)
-FetchContent_MakeAvailable(json)
+#FetchContent_Declare(
+#    json 
+#    GIT_REPOSITORY "https://github.com/nlohmann/json.git"
+#    GIT_SHALLOW TRUE
+#)
+#FetchContent_MakeAvailable(json)
 
 
 add_library(tinyfiledialogs_lib)
