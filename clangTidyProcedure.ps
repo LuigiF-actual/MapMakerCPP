@@ -1,0 +1,7 @@
+Get-ChildItem include -Recurse *.hpp | ForEach-Object {
+  clang-tidy $_.FullName -p build
+}
+
+Get-ChildItem source,include -Recurse *.cpp,*.hpp | ForEach-Object {
+    clang-tidy $_.FullName -p build
+}

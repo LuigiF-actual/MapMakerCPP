@@ -1,7 +1,7 @@
 1. Make the map screen move DONE
 1.1 Make it so you can also zoom out/in the top screen DONE 
 
-2. Change so you can only use mouse and up,down,left,right to move palette screen DONE but i done with mouse instead
+2. Change so you can only use mouse and up,down,left,right to move palette screen DONE (but i done with mouse instead)
 
 3. When the user press H show a help screen DONE
 
@@ -11,8 +11,24 @@
 
 6. make it so the grid in  texture pallete is dinamic IE when texture change the grid ajust to it
 
-7. make a menu, when you start the program it shows your saves alongside a mini picture of the map besides it 
+7. make a menu DONE
+7.1 add functionality to menu
+7.10 when you start the program it shows your saves alongside a mini picture of the map besides it 
 
 8. make a navbar on top to show FPS current draw mode buttons to pick the draw mode etc...
 
-9. 
+9. 319 clang-tidy warnings! fix it
+9.1 259
+9.2 223
+9.3 199
+9.4 188
+9.5 80
+9.6 59
+9.7 57
+9.8 46
+
+10. Unify the tiles sizes to 64.0f
+
+11. Remove offset feature from tilegrid class
+
+
