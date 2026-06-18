@@ -4,7 +4,6 @@
 #include "Window.h"
 #include "Event.h"
 #include "SaveFileSystem.hpp"
-#include "PopUpWarnings.hpp"
 
 #include <raylib.h>
 #include <string>
@@ -78,7 +77,6 @@ namespace Core {
 		static Application& Get();
 
 		SavesFilesManager& GetSaveManager();
-		PopUpWarnings& GetWarningManager() { return m_WarningManager; }
 	
 	private:
 
@@ -91,7 +89,6 @@ namespace Core {
 		std::vector< std::unique_ptr<Layer> > m_LayerStack;
 
 		SavesFilesManager m_SavesManager;
-		PopUpWarnings m_WarningManager;
 
 		friend class Layer;
 		

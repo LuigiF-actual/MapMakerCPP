@@ -18,8 +18,7 @@ enum class MenuAction : unsigned char
 	NONE,
 	NEW_PROJECT,
 	OPEN_PROJECT,
-	SAVE_PROJECT,
-	SAVEorDISCARD_PROJECT
+	SAVE_PROJECT
 };
 
 
@@ -88,8 +87,8 @@ public:
 
 	void Resize()
 	{
-		m_WinBoxBody.x = (GetScreenWidth() / 2.0f) - m_WinBoxBody.width / 2.0f;
-		m_WinBoxBody.y = (GetScreenHeight() * 5.0f / 100.0f);
+		m_WinBoxBody.x = (static_cast<float>(GetScreenWidth()) / 2.0f) - m_WinBoxBody.width / 2.0f;
+		m_WinBoxBody.y = (static_cast<float>(GetScreenHeight()) * 5.0f / 100.0f);
 	}
 private:
 
@@ -138,7 +137,7 @@ private:
 
 	NewProjectConfig& m_Config;
 
-	Rectangle m_WinBoxBody = { GetScreenWidth() / 2.0f - 440.0f,50.0f, 440.0f,880.0f };
+	Rectangle m_WinBoxBody = { static_cast<float>(GetScreenWidth()) / 2.0f - 440.0f,50.0f, 440.0f,880.0f };
 
 	std::regex m_Filter{ "[a-zA-Z][a-zA-Z0-9_]{1,15}" };
 };
@@ -197,8 +196,8 @@ public:
 	}
 
 	void Resize() { 
-		m_WinBoxBody.x = (GetScreenWidth() / 2.0f) - m_WinBoxBody.width/2.0f;
-		m_WinBoxBody.y = (GetScreenHeight() * 30.0f/100.0f);
+		m_WinBoxBody.x = (static_cast<float>(GetScreenWidth()) / 2.0f) - m_WinBoxBody.width / 2.0f;
+		m_WinBoxBody.y = (static_cast<float>(GetScreenHeight()) * 30.0f / 100.0f);
 	
 	}
 
@@ -222,16 +221,15 @@ class Menu
 public:
 
 	Menu() {
-		m_ButtonH = GetScreenHeight() * 10 / 100.0f;
-		m_ButtonW = GetScreenWidth() * 15 / 100.0f;
-		m_MarginLeft = (GetScreenWidth() / 2.0f) - m_ButtonW / 2.0f;
-		m_MarginTop = GetScreenHeight() * 25 / 100.0f;
+		m_ButtonH = static_cast<float>(GetScreenHeight()) * 10 / 100.0f;
+		m_ButtonW = static_cast<float>(GetScreenWidth()) * 15 / 100.0f;
+		m_MarginLeft = (static_cast<float>(GetScreenWidth()) / 2.0f) - m_ButtonW / 2.0f;
+		m_MarginTop = static_cast<float>(GetScreenHeight()) * 25 / 100.0f;
 		GuiSetStyle(DEFAULT, TEXT_SIZE, static_cast<int>(m_ButtonH * 25.0f / 100));
 	}
 
 	void update()
 	{
-
 		switch (m_BtnState)
 		{
 		case MenuAction::NONE:
@@ -247,11 +245,7 @@ public:
 		case MenuAction::SAVE_PROJECT:
 			m_SubmitAction = true;
 			break;
-		case MenuAction::SAVEorDISCARD_PROJECT:
-			break;
 		}
-
-
 	}
 
 
@@ -275,10 +269,10 @@ public:
 
 	void resizeMenu()
 	{
-		m_ButtonH = GetScreenHeight() * 10 / 100.0f;
-		m_ButtonW = GetScreenWidth() * 15 / 100.0f;
-		m_MarginLeft = (GetScreenWidth() / 2.0f) - m_ButtonW / 2.0f;
-		m_MarginTop = GetScreenHeight() * 25 / 100.0f;
+		m_ButtonH = static_cast<float>(GetScreenHeight()) * 10 / 100.0f;
+		m_ButtonW = static_cast<float>(GetScreenWidth()) * 15 / 100.0f;
+		m_MarginLeft = (static_cast<float>(GetScreenWidth()) / 2.0f) - m_ButtonW / 2.0f;
+		m_MarginTop = static_cast<float>(GetScreenHeight()) * 25 / 100.0f;
 		GuiSetStyle(DEFAULT, TEXT_SIZE, static_cast<int>(m_ButtonH * 25.0f / 100));
 		m_OpenProject.Resize();
 		m_NewProject.Resize();

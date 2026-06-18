@@ -12,6 +12,7 @@
 #include "Core/WindowEvents.h"
 #include "Core/Application.h"
 #include "Core/SaveData.hpp"
+#include "Core/PopUpWarnings.hpp"
 
 #include "MenuLayer.h"
 

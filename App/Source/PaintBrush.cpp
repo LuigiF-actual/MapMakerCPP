@@ -3,6 +3,7 @@
 
 void PaintBrush::checkKeyboard()
 {
+
 	int key = GetKeyPressed();
 
 	switch (key)
@@ -26,6 +27,7 @@ void PaintBrush::checkKeyboard()
 	{
 		m_Cmd.redo();
 	}
+
 }
 
 void PaintBrush::checkMouseInput()

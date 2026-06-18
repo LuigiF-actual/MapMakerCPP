@@ -158,8 +158,10 @@ public:
 		{
 			for (int column = 0; column < m_Cols; column++)
 			{
-				m_TileGrid[row * m_Cols + column].body.x = column * m_TileSize + newPos.x;
-				m_TileGrid[row * m_Cols + column].body.y = row * m_TileSize + newPos.y;
+				size_t index = (static_cast<std::size_t>(row) * m_Cols) + column;
+
+				m_TileGrid[index].body.x = static_cast<float>(column) * m_TileSize + newPos.x;
+				m_TileGrid[index].body.y = static_cast<float>(row) * m_TileSize + newPos.y;
 			}
 		}
 	}
@@ -170,8 +172,10 @@ public:
 		{
 			for (int column = 0; column < m_Cols; column++)
 			{
-				m_TileGrid[row * m_Cols + column].scRec.x = column * m_TileSize;
-				m_TileGrid[row * m_Cols + column].scRec.y = row * m_TileSize;
+				size_t index = (static_cast<std::size_t>(row) * m_Cols) + column;
+
+				m_TileGrid[index].scRec.x = static_cast<float>(column) * m_TileSize;
+				m_TileGrid[index].scRec.y = static_cast<float>(row) * m_TileSize;
 			}
 		}
 	}

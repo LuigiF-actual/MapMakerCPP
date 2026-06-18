@@ -90,6 +90,11 @@ bool AppLayer::OnKeyPressed(Core::KeyPressedEvent& event) // NOLINT
 {
 	if (event.IsRepeat() == false)
 	{
+        if (event.GetKeyCode() == KEY_T)
+        {
+            Core::Warnings::messageBox("Fatal", "A texture was not found, make sure all your textures are in the texture folder", "ok", "error", 0);
+        }
+
 		if (event.GetKeyCode() == KEY_ESCAPE)
 		{
 			std::println("App requested switch back to Menu!");
