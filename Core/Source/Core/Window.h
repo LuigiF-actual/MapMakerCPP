@@ -6,7 +6,7 @@
 
 #include <string>
 #include <functional>
-
+#include <cstdint>
 
 namespace Core {
 

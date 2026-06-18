@@ -11,6 +11,7 @@ namespace Core {
 	Application::Application(const ApplicationSpecification& specification)
 		: m_Specification(specification)
 	{
+
 		s_Application = this;
 
 		// Set window title to app name if empty

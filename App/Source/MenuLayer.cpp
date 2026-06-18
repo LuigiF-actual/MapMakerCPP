@@ -20,8 +20,6 @@ void MenuLayer::OnUpdate()
 			Core::Application::Get().SwitchLayer<AppLayer>();
 			break;
 		}
-
-
 		case MenuAction::OPEN_PROJECT:
 		{
 			std::println("Trying to load, {} ", m_Menu.GetPathToSave().string());

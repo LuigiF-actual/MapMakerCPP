@@ -6,7 +6,7 @@
 #include <filesystem>
 
 #include "raylib.h"
-#include "Core/Application.h"
+#include "Core/PopUpWarnings.hpp"
 
 class AtlasManager
 {
@@ -43,7 +43,7 @@ public:
             }
         }
 
-        Core::Application::Get().GetWarningManager().messageBox("Fatal", "A texture was not found, make sure all your textures are in the texture folder", "ok", "error", 0);
+        Core::Warnings::messageBox("Fatal", "A texture was not found, make sure all your textures are in the texture folder", "ok", "error", 0);
 
         return lastResource;
     }
