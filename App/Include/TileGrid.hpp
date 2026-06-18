@@ -135,7 +135,7 @@ public:
 		return m_TileGrid;
 	}
 
-	Tile* findTile(Vector2 position)
+	[[nodiscard]] Tile* findTile(Vector2 position)
 	{
 		for (auto& tile : m_TileGrid)
 		{
@@ -178,6 +178,13 @@ public:
 				m_TileGrid[index].scRec.y = static_cast<float>(row) * m_TileSize;
 			}
 		}
+	}
+
+
+	void setNewWitdhHeight(const int Width, const int Height)
+	{
+		m_Cols = Width;
+		m_Rows = Height;
 	}
 
 	[[nodiscard]] Vector2 offset() const { return m_GridOffSet; }
