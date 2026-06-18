@@ -40,27 +40,19 @@ public:
         if (IsKeyPressed(KEY_K))
         {
             std::string tempPath = m_FileExplorer.openExplorer();
+         
             if (!tempPath.empty())
             {
                 tempPath = std::filesystem::path(tempPath).stem().string();
-                setTexture(&AtlasManager::getInstance().getTexture(tempPath));
+                const Texture2D* tempTex = &AtlasManager::getInstance().getTexture(tempPath);
+
+                if (tempTex != nullptr)
+                {
+                    resizeGrid(static_cast<int>(tempTex->width / 16), static_cast<int>(tempTex->height / 16));
+                    setTexture(tempTex);
+                }
             }
         }
-
-        if (IsWindowResized())
-        {
-
-            m_AnchorPoint.y = static_cast<float>(GetScreenHeight()) - (static_cast<float>(GetScreenHeight()) * (30.0f / 100.0f));
-            if (m_AnchorPoint.y != m_PaletteBackGround.body.y)
-            {
-                m_ClickCells.setGidPos(m_AnchorPoint);
-            }
-            m_PaletteBackGround.body.y = m_AnchorPoint.y;
-            m_PaletteBackGround.body.width = static_cast<float>(GetScreenWidth());
-
-        }
-
-
 
     }
 
@@ -139,6 +131,54 @@ public:
     {
         return m_PaletteBackGround;
     }
+
+
+
+    void Resize()
+    {
+        m_AnchorPoint.y = static_cast<float>(GetScreenHeight()) - (static_cast<float>(GetScreenHeight()) * (30.0f / 100.0f));
+        if (m_AnchorPoint.y != m_PaletteBackGround.body.y)
+        {
+            m_ClickCells.setGidPos(m_AnchorPoint);
+        }
+        m_PaletteBackGround.body.y = m_AnchorPoint.y;
+        m_PaletteBackGround.body.width = static_cast<float>(GetScreenWidth());
+    }
+
+private:
+
+    void resizeGrid(const int Width, const int Height)
+    {
+        m_ClickCells.getArr().clear();
+
+        m_ClickCells.setNewWitdhHeight(Width, Height);
+
+
+        for (int row = 0; row < Height; row++)
+        {
+            for (int column = 0; column < Width; column++)
+            {
+                m_ClickCells.getArr().emplace_back(
+                    Tile{
+                        nullptr,
+                        Rectangle{
+                            static_cast<float>(column) * Config::paletteTilesSize + m_AnchorPoint.x,
+                            static_cast<float>(row) * Config::paletteTilesSize + m_AnchorPoint.y,
+                            Config::paletteTilesSize,
+                            Config::paletteTilesSize
+                        },
+                        Rectangle{
+                            static_cast<float>(column)* Config::paletteTilesSize,
+                            static_cast<float>(row)* Config::paletteTilesSize,
+                            Config::paletteTilesSize, 
+                            Config::paletteTilesSize
+                        }
+                    }
+                );
+            }
+        }
+    }
+
 
 private:
 

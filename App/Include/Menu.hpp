@@ -234,6 +234,7 @@ public:
 		{
 		case MenuAction::NONE:
 			drawMenu();
+			drawTitle();
 			break;
 		case MenuAction::NEW_PROJECT:
 			DrawRectangle(0.0f, 0.0f, GetScreenWidth(), GetScreenHeight(), Color{ 70,130,180,255 });
@@ -287,6 +288,12 @@ public:
 
 private:
 
+	void drawTitle()
+	{
+		DrawText("  Map Maker", (static_cast<float>(GetScreenWidth()) / 2.0f) - (static_cast<float>(GetScreenHeight()) * 0.3f), 55, static_cast<float>(GetScreenHeight()) * 0.1f, RAYWHITE);
+		DrawText("Version 1.0", (static_cast<float>(GetScreenWidth()) / 2.0f) - (static_cast<float>(GetScreenHeight()) * 0.1f), 55.0f + static_cast<float>(GetScreenHeight()) * 0.1f, static_cast<float>(GetScreenHeight()) * 0.05f, RAYWHITE);
+	}
+
 	void drawMenu()
 	{
 		DrawRectangle(0.0f, 0.0f, GetScreenWidth(), GetScreenHeight(), Color{ 70,130,180,255 });
@@ -309,6 +316,8 @@ private:
 	float m_MarginTop = 0.0f;
 	float m_ButtonH = 0.0f;
 	float m_ButtonW = 0.0f;
+
+
 
 	MenuAction m_BtnState = MenuAction::NONE;
 

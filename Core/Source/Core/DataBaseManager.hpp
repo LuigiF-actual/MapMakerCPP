@@ -157,7 +157,7 @@ private:
 			return;
 		}
 
-		const std::string defaultSprite = "Empty";
+		const std::string defaultSprite = "GrassComplete";
 
 		for (int i = 0; i < m_TableSize; ++i)
 		{

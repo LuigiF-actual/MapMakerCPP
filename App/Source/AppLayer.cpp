@@ -116,6 +116,7 @@ bool AppLayer::OnKeyPressed(Core::KeyPressedEvent& event) // NOLINT
 bool AppLayer::OnWindowResize(Core::WindowResizeEvent& event)
 {
 	std::print("AppLayer Heard it!");
+    m_Palette.Resize();
 	return false;
 }
 
