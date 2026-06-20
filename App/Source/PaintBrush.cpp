@@ -14,6 +14,11 @@ void PaintBrush::checkKeyboard()
 		m_Mode = PaintMode::RECTANGLE;
 	}
 
+	if (IsKeyPressed(KEY_G))
+	{
+		m_Mode = PaintMode::FILL;
+	}
+
 	if (m_Keyboard.ctrlZ() || m_UndoCmd)
 	{
 		std::print("Undo");
@@ -47,6 +52,9 @@ void PaintBrush::checkMouseInput()
 				break;
 			case PaintMode::NORMAL:
 				paintTile();
+				break;
+			case PaintMode::FILL:
+				bucketFill();
 				break;
 			}
 		}
@@ -104,4 +112,25 @@ void PaintBrush::pickPaletteCell()
 	{
 		m_SelectedCell = m_TexturesPallete.getSelectedCell();
 	}
+}
+
+void PaintBrush::bucketFill()
+{
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+	{
+		Tile* p_Tile = m_TileGrid.findTile(GetScreenToWorld2D(GetMousePosition(), m_WorldCam));
+		if ((p_Tile != nullptr) && (m_SelectedCell != nullptr))
+		{
+
+			if (p_Tile->scRec.x != m_SelectedCell->scRec.x ||
+				p_Tile->scRec.y != m_SelectedCell->scRec.y ||
+				&m_TexturesPallete.getTexture() != p_Tile->texture)
+			{
+				auto paintCmd = std::make_unique<FloodFill>(m_TileGrid, static_cast<int>(p_Tile->body.x / Config::tileSize), static_cast<int>(p_Tile->body.y / Config::tileSize), m_SelectedCell);
+				m_Cmd.execute(std::move(paintCmd));
+				std::print("BucketTool");
+			}
+		}
+	}
+	
 }
