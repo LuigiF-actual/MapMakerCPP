@@ -39,6 +39,7 @@ void AppLayer::OnRender()
 {
 	if (m_World == nullptr) { return; }
 
+
     BeginScissorMode(0, 0, GetScreenWidth(), static_cast<int>(m_Palette.getPosition().y));
 
     BeginMode2D(m_Cam);
@@ -62,6 +63,7 @@ void AppLayer::OnRender()
 
 	EndScissorMode();
 
+    m_World->GetNavBar().update();
 }
 
 bool AppLayer::OnMouseButtonPressed(Core::MouseButtonPressedEvent& event) //NOLINT
