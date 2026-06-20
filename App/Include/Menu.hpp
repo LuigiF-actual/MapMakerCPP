@@ -296,19 +296,29 @@ private:
 
 	void drawMenu()
 	{
+		float boxSize = GetScreenHeight() * 0.05f;
+		int iconScale = static_cast<int>(boxSize / 16.0f);
+
+		if (iconScale < 1) iconScale = 1;
+
+		GuiSetIconScale(iconScale);
+
 		DrawRectangle(0.0f, 0.0f, GetScreenWidth(), GetScreenHeight(), Color{ 70,130,180,255 });
-		if (GuiButton(Rectangle{ m_MarginLeft, m_MarginTop, m_ButtonW, m_ButtonH }, "#191#New Project") == 1)
+		if (GuiButton(Rectangle{ m_MarginLeft, m_MarginTop, m_ButtonW, m_ButtonH }, "#5#New Project") == 1)
 		{
 			m_BtnState = MenuAction::NEW_PROJECT;
 		}
-		if (GuiButton(Rectangle{ m_MarginLeft, m_MarginTop + m_ButtonH, m_ButtonW, m_ButtonH }, "#191#Open Project") == 1)
+		if (GuiButton(Rectangle{ m_MarginLeft, m_MarginTop + m_ButtonH, m_ButtonW, m_ButtonH }, "#1#Open Project") == 1)
 		{
 			m_BtnState = MenuAction::OPEN_PROJECT;
 		}
-		if (GuiButton(Rectangle{ m_MarginLeft, m_MarginTop + (m_ButtonH * 2), m_ButtonW, m_ButtonH }, "#191#Save Project") == 1)
+		if (GuiButton(Rectangle{ m_MarginLeft, m_MarginTop + (m_ButtonH * 2), m_ButtonW, m_ButtonH }, "#2#Save Project") == 1)
 		{
 			m_BtnState = MenuAction::SAVE_PROJECT;
 		}
+
+		GuiSetIconScale(1);
+
 	}
 
 private:

@@ -4,48 +4,51 @@
 void PaintBrush::checkKeyboard()
 {
 
-	int key = GetKeyPressed();
-
-	switch (key)
+	if(IsKeyPressed(KEY_B))
 	{
-	case KEY_B:
 		m_Mode = PaintMode::NORMAL;
-		break;
-	case KEY_U:
+	}
+
+	if (IsKeyPressed(KEY_U))
+	{
 		m_Mode = PaintMode::RECTANGLE;
-		break;
-	default:
-		break;
 	}
 
-	if (m_Keyboard.ctrlZ())
+	if (m_Keyboard.ctrlZ() || m_UndoCmd)
 	{
+		std::print("Undo");
 		m_Cmd.undo();
-
+		m_UndoCmd = false;
 	}
-	if (m_Keyboard.ctrlY())
+	if (m_Keyboard.ctrlY() || m_RedoCmd)
 	{
+		std::print("Redo");
 		m_Cmd.redo();
+		m_RedoCmd = false;
 	}
 
 }
 
 void PaintBrush::checkMouseInput()
 {
-	if (GetMousePosition().y > m_TexturesPallete.getPosition().y)
+
+	if (GetMousePosition().y > GetScreenHeight() * 0.05f)
 	{
-		pickPaletteCell();
-	}
-	else
-	{
-		switch (m_Mode)
+		if (GetMousePosition().y > m_TexturesPallete.getPosition().y)
 		{
-		case PaintMode::RECTANGLE:
-			rectangleFill();
-			break;
-		case PaintMode::NORMAL:
-			paintTile();
-			break;
+			pickPaletteCell();
+		}
+		else
+		{
+			switch (m_Mode)
+			{
+			case PaintMode::RECTANGLE:
+				rectangleFill();
+				break;
+			case PaintMode::NORMAL:
+				paintTile();
+				break;
+			}
 		}
 	}
 }
