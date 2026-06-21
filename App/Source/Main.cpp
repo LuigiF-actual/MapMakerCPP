@@ -1,7 +1,6 @@
 #include "Core/Application.h"
 
 #include "AppLayer.h"
-#include "OverlayLayer.h"
 
 int main()
 {
@@ -23,5 +22,3 @@ int main()
 	application.Run();
 }
 
-//application.PushLayer<AppLayer>();
-	//application.PushLayer<OverlayLayer>();

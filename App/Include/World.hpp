@@ -32,7 +32,6 @@ public:
         m_PaintBrush{ m_WorldGrid ,palette,cam },
         m_NavBar{ m_PaintBrush.GetPmode(),m_PaintBrush.GetRedoBool(),m_PaintBrush.GetUndoBool() }
     {
-        std::println("NewWorldCreated {} {}", gridW, gridH);
     }
 
     TileGrid& GetGrid() { return m_WorldGrid; }

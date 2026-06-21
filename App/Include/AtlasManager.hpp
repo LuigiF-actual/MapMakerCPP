@@ -17,9 +17,6 @@ public:
         return atlas;
     }
 
-    AtlasManager(const AtlasManager&) = delete; //avoid copying as if it were to be copied 2 instances could exist 
-    AtlasManager& operator=(const AtlasManager&) = delete;
-
     const Texture2D& getTexture(const std::string& name) const
     {
         return m_TextureAtlas.at(name);
@@ -49,7 +46,7 @@ public:
     }
 
 private:
-    /* data */
+
     AtlasManager()
     {
 

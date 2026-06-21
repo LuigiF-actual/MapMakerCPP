@@ -48,11 +48,6 @@ public:
             m_Redo = true;
         }
 
-        ///if (GuiTabBar(Rectangle{ 100.0f + boxSize * 3, boxSize, boxSize, boxSize }, const_cast<char**>(m_Words), 2, &Active) == 1)
-        //{
-
-        //}
-
         GuiSetIconScale(1);
 	}
 
@@ -69,75 +64,3 @@ private:
     int Active = 0;
 };
 
-/*
-
-
-int GuiRadioButton(Rectangle bounds, RadioBtnState* btnState, RadioBtnState btnValue, const char* text, bool* checked)
-{
-    int result = 0;
-    GuiState state = guiState;
-
-    bool temp = false;
-    if (checked == NULL) checked = &temp;
-
-    Rectangle textBounds = { 0 };
-
-    if (text != NULL)
-    {
-        textBounds.width = (float)GuiGetTextWidth(text) + 2;
-        textBounds.height = (float)GuiGetStyle(DEFAULT, TEXT_SIZE);
-        textBounds.x = bounds.x + bounds.width + GuiGetStyle(CHECKBOX, TEXT_PADDING);
-        textBounds.y = bounds.y + bounds.height / 2 - GuiGetStyle(DEFAULT, TEXT_SIZE) / 2;
-        if (GuiGetStyle(CHECKBOX, TEXT_ALIGNMENT) == TEXT_ALIGN_LEFT) textBounds.x = bounds.x - textBounds.width - GuiGetStyle(CHECKBOX, TEXT_PADDING);
-    }
-
-    // Update control
-    //--------------------------------------------------------------------
-    if ((state != STATE_DISABLED) && !guiLocked && !guiControlExclusiveMode)
-    {
-        Vector2 mousePoint = GUI_POINTER_POSITION;
-
-        Rectangle totalBounds = {
-            (GuiGetStyle(CHECKBOX, TEXT_ALIGNMENT) == TEXT_ALIGN_LEFT) ? textBounds.x : bounds.x,
-            bounds.y,
-            bounds.width + textBounds.width + GuiGetStyle(CHECKBOX, TEXT_PADDING),
-            bounds.height,
-        };
-
-        // Check checkbox state
-        if (CheckCollisionPointRec(mousePoint, totalBounds))
-        {
-            if (GUI_BUTTON_DOWN) state = STATE_PRESSED;
-            else state = STATE_FOCUSED;
-
-            if (GUI_BUTTON_RELEASED)
-            {
-                *checked = !(*checked);
-                result = 1;
-            }
-        }
-    }
-    //--------------------------------------------------------------------
-
-    // Draw control
-    //--------------------------------------------------------------------
-    GuiDrawRectangle(bounds, GuiGetStyle(CHECKBOX, BORDER_WIDTH), GetColor(GuiGetStyle(CHECKBOX, BORDER + (state * 3))), BLANK);
-
-    if (*checked)
-    {
-        Rectangle check = { bounds.x + GuiGetStyle(CHECKBOX, BORDER_WIDTH) + GuiGetStyle(CHECKBOX, CHECK_PADDING),
-                            bounds.y + GuiGetStyle(CHECKBOX, BORDER_WIDTH) + GuiGetStyle(CHECKBOX, CHECK_PADDING),
-                            bounds.width - 2 * (GuiGetStyle(CHECKBOX, BORDER_WIDTH) + GuiGetStyle(CHECKBOX, CHECK_PADDING)),
-                            bounds.height - 2 * (GuiGetStyle(CHECKBOX, BORDER_WIDTH) + GuiGetStyle(CHECKBOX, CHECK_PADDING)) };
-        GuiDrawRectangle(check, 0, BLANK, GetColor(GuiGetStyle(CHECKBOX, TEXT + state * 3)));
-    }
-
-    GuiDrawText(text, textBounds, (GuiGetStyle(CHECKBOX, TEXT_ALIGNMENT) == TEXT_ALIGN_RIGHT) ? TEXT_ALIGN_LEFT : TEXT_ALIGN_RIGHT, GetColor(GuiGetStyle(LABEL, TEXT + (state * 3))));
-    //--------------------------------------------------------------------
-
-    return result;
-}
-
-
-
-*/

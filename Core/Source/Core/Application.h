@@ -17,7 +17,7 @@ namespace Core {
 
 	struct ApplicationSpecification
 	{
-		std::string Name = "Application";
+		std::string Name = "MapMakerC++";
 		WindowSpecification WindowSpec;
 	};
 
@@ -59,16 +59,11 @@ namespace Core {
 			T* targetLayer = GetLayer<T>();
 			if (targetLayer != nullptr)
 			{
-				std::println("Target layer found");
 				for (std::unique_ptr<Layer>& layer : m_LayerStack)
 				{
 					layer->SetActive(false);
 				}
 				targetLayer->SetActive(true);
-			}
-			else
-			{
-				std::println("ERROR: layer not found");
 			}
 		}
 
@@ -96,40 +91,3 @@ namespace Core {
 
 }
 
-
-//template<typename TLayer>
-//requires(std::is_base_of_v<Layer, TLayer>)
-//void PushLayer()
-		/*template<typename TLayer>
-		requires(std::is_base_of_v<Layer, TLayer>)
-		TLayer* GetLayer()
-		{
-			for (const auto& layer : m_LayerStack)
-			{
-				if (auto casted = dynamic_cast<TLayer*>(layer.get()))
-				{
-					return casted;
-				}
-			}
-			return nullptr;
-		}
-
-		template<typename T>
-		void SwitchLayer()
-		{
-			// looks for active Layers and deactivate them
-			for (auto& layer : m_LayerStack)
-			{
-				if (layer->IsActive())
-				{
-					layer->SetActive(false);
-				}
-			}
-
-			// Finds the layer to activate and sets it to true
-			T* targetLayer = GetLayer<T>();
-			if (targetLayer != nullptr)
-			{
-				targetLayer->SetActive(true);
-			}
-		}*/

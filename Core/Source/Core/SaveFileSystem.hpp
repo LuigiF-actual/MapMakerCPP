@@ -72,10 +72,3 @@ private:
 	std::filesystem::path m_PathToCurrentSave;
 	DataBaseManager m_DBmanager;
 };
-
-
-//std::ofstream Files(std::filesystem::path(pathToSave).append(std::string(saveName)+".db"));
-//Files.close();
-//
-//Files.open(std::filesystem::path(pathToSave).append(std::string(saveName)+".json"));
-//Files.close();

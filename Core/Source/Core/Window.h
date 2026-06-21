@@ -39,7 +39,6 @@ namespace Core {
 		void PollEvents();
 
 
-		//Vector2 GetFramebufferSize() const;
 		Vector2 GetMousePos() const;
 
 		bool ShouldClose() const;
