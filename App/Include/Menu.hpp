@@ -401,7 +401,9 @@ private:
 		"Q,E to zoom In,Out world view \n"
 		"Press B for normal paint \n"
 		"Press U for rectangle too \n"
-		"Press T for bucket fill \n");
+		"Press T for bucket fill \n"
+		"Press K to open new atlas\n"
+		"Atlases **MUST** be 16x16 each tile");
 
 	Rectangle m_helpTextBody = { GetScreenHeight() / 2.0f,15.0f,GetScreenHeight() / 2.0f, GetScreenHeight() / 2.0f };
 		                     
