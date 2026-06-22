@@ -1,7 +1,5 @@
 # Map making tool for raylib propjects 
 ## Version 1.0
-<img width="1604" height="1260" alt="Screenshot 2026-05-14 134222" src="https://github.com/user-attachments/assets/dd7ef00a-a9f3-4179-abd4-d0871323d1bf" />
-
 
 ## Requirements 
 ### CXX 23 or higher 
@@ -13,5 +11,11 @@
 ### cmake -B build -G Ninja
 ### Cd MapMakerCPP
 ### cmake --build build
+
+<img width="1924" height="1140" alt="image" src="https://github.com/user-attachments/assets/797b1bca-a6e4-45eb-bc9e-bb519b3fcaad" />
+
+
+<img width="2880" height="1800" alt="image" src="https://github.com/user-attachments/assets/8145bad0-8084-4de4-98df-636276a86b0a" />
+
 
 
