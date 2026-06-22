@@ -14,7 +14,6 @@ namespace Core {
 
 		s_Application = this;
 
-		// Set window title to app name if empty
 		if (m_Specification.WindowSpec.Title.empty())
 			m_Specification.WindowSpec.Title = m_Specification.Name;
 

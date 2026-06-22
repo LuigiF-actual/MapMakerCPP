@@ -5,7 +5,7 @@
 int main()
 {
 	Core::ApplicationSpecification appSpec;
-	appSpec.Name = "Architecture";
+	appSpec.Name = "MapMakerC++";
 	appSpec.WindowSpec.Width = 1920;
 	appSpec.WindowSpec.Height = 1080;
 
