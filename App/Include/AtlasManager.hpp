@@ -7,6 +7,7 @@
 
 #include "raylib.h"
 #include "Core/PopUpWarnings.hpp"
+#include "Config.hpp"
 
 class AtlasManager
 {
@@ -50,7 +51,7 @@ private:
     AtlasManager()
     {
 
-        std::filesystem::path TexturesDirPath = std::string(TEXTURES_PATH); //cool trick
+        std::filesystem::path TexturesDirPath = Config::getImagesDir();
 
         if (std::filesystem::is_directory(TexturesDirPath))
         {

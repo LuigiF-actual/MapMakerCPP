@@ -17,7 +17,7 @@ public:
 	{
 		const char* Path = tinyfd_openFileDialog(
 			"Select Texture",
-			Config::getImagesDir().string().c_str(),
+			(Config::getImagesDir().string() + "/").c_str(),
 			2,
 			m_FiltersForFolder,
 			"images files",
@@ -73,6 +73,6 @@ public:
 
 
 private:
-	const char* m_FiltersForFolder[2] = { "*.jpg","*.png" };
+	const char* m_FiltersForFolder[2] = { "*.png", "*.jpg" };
 	const char* m_FilterForSaves[1] = { "*.db" };
 };
