@@ -2,7 +2,7 @@
 
 #include <raylib.h>
 #include <raygui.h>
-
+#include <iostream>
 
 #include "PaintMode.hpp"
 
@@ -48,10 +48,13 @@ public:
             m_Redo = true;
         }
 
-        ///if (GuiTabBar(Rectangle{ 100.0f + boxSize * 3, boxSize, boxSize, boxSize }, const_cast<char**>(m_Words), 2, &Active) == 1)
-        //{
 
-        //}
+        GuiCheckBox(Rectangle{ 100.0f + boxSize * 8, 0.0f, boxSize, boxSize }, "Textures Chooser", &m_IsTexSelectorActive);
+
+        if (m_IsTexSelectorActive)
+        {
+            drawTextureSelector();
+        }
 
         GuiSetIconScale(1);
 	}
@@ -59,14 +62,62 @@ public:
 
 private:
 
+    void drawTextureSelector()
+    {
+        for (auto const& dir_entry : std::filesystem::directory_iterator{ Config::getImagesDir() })
+        {
+            m_PanelContent.height += 120.0f;
+        }
+
+        GuiScrollPanel(m_WinBoxBody, "Choose Save", m_PanelContent, &m_PanelScroll, &m_PanelView);
+
+        if (GuiButton(Rectangle{ 10.0f, 10.0f, m_WinBoxBody.width * 40.0f / 100 , m_WinBoxBody.height * 15.0f / 100 }, "Leave") == 1)
+        {
+            return;
+        }
+
+        BeginScissorMode(static_cast<int>(m_PanelView.x), static_cast<int>(m_PanelView.y), static_cast<int>(m_PanelView.width), static_cast<int>(m_PanelView.height));
+
+        for (const auto [index, pathToSave] : std::views::enumerate(std::filesystem::directory_iterator{ Config::getImagesDir() }))
+        {
+            Rectangle itemRect = {
+                m_WinBoxBody.x + m_PanelScroll.x + 20,				 // Base X + Scroll Offset + Padding
+                m_WinBoxBody.y + m_PanelScroll.y + 20 + (index * 120), // Base Y + Scroll Offset + Padding + Spacing
+                400,
+                100
+            };
+            if (GuiButton(itemRect, pathToSave.path().stem().string().c_str()) == 1)
+            {
+                std::cout << std::filesystem::path(pathToSave.path()).append(pathToSave.path().stem().string()) << "\n";
+                break;
+            }
+        }
+
+
+        EndScissorMode();
+        m_PanelContent.height = 0.0f;
+    }
+
+private:
+
 	Rectangle m_Gbox = { 0.0f,0.0f,static_cast<float>(GetScreenWidth()),GetScreenHeight() * 0.05f };
-	
+
+    Rectangle m_TexNameBox = { GetScreenWidth() / 2.0f,GetScreenHeight() / 2.0f,static_cast<float>(GetScreenWidth() * 0.15),static_cast<float>(GetScreenHeight() * 0.15) };
+
+    Rectangle m_WinBoxBody = { 400.0f, 100.0f, 500.0f, 500.0f };//{ GetScreenWidth() / 2.0f - 440.0f,50.0f, 440.0f,880.0f };
+    Rectangle m_PanelContent = { 0.0f, 0.0f, 500.0f, 0.0f };    // The total size of the inside area
+    Vector2 m_PanelScroll = { 0.0f, 0.0f };                       // Tracks X/Y scroll position
+    Rectangle m_PanelView = { 0 };
+
+
 	bool& m_Undo;
 	bool& m_Redo;
+    
+    bool m_IsTexSelectorActive = false;
 
 	PaintMode& m_Pmode;
 
-    int Active = 0;
+    int m_Active = 0;
 };
 
 /*

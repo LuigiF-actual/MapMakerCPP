@@ -43,7 +43,7 @@ set_target_properties(App PROPERTIES
 )
 
 target_compile_definitions(App PRIVATE
-    TEXTURES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/Textures/"
+    TEXTURES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/Textures"
 )
 
 target_compile_definitions(App PRIVATE
