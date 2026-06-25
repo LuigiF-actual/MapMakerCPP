@@ -21,8 +21,6 @@ namespace Config
 	constexpr float worldCamMoveSpd = 250.0f;
 	constexpr float zoomSpd = 0.1f;
 
-	//inline const std::filesystem::path imagesDir = std::filesystem::path(RESOURCES_PATH).lexically_normal();
-	//inline const std::filesystem::path savesDir = std::filesystem::path(SAVES_PATH).lexically_normal();
 
 
 	[[nodiscard]] inline const std::string& getDefault_Atlas() {
@@ -32,7 +30,6 @@ namespace Config
 		return default_Atlas;
 	}
 
-	//Obligates the user to use the return value in some way.
 	[[nodiscard]] inline const std::filesystem::path& getSavesDir() {
 
 		static const std::filesystem::path savesDir = std::filesystem::path(SAVES_PATH).lexically_normal();
@@ -42,7 +39,6 @@ namespace Config
 
 
 	[[nodiscard]] inline const std::filesystem::path& getImagesDir() {
-		// New way to have it initialized only when a variable in the game needs it
 		static const std::filesystem::path imagesDir = std::filesystem::path(TEXTURES_PATH).lexically_normal();
 
 		return imagesDir;

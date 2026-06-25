@@ -26,8 +26,9 @@ namespace Core {
         }
         InitWindow(m_Specification.Width, m_Specification.Height, m_Specification.Title.c_str());
 
+        SetTargetFPS(60);
+
         SetExitKey(KEY_NULL);
-        std::cout << "\nWindow Created\n";
     }
 
     void Window::Destroy()
@@ -73,7 +74,7 @@ namespace Core {
 
 
         int latestPKey = 0;
-        int PKey = 0;//ig the keyupdate is too fast...
+        int PKey = 0;
         auto keypresedEvent = [&]() {
             for (int keycode = 8; keycode <= 348; keycode++)
             {

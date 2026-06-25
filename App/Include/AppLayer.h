@@ -52,7 +52,6 @@ public:
 
 		auto tiles = m_World->GetGrid().DataToBeSaved();
 		Core::Application::Get().GetSaveManager().SaveGame(tiles);
-		std::print("Here at SaveWorld!\n");
 	}
 
 

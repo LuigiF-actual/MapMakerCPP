@@ -1,12 +1,11 @@
 #include "Core/Application.h"
 
 #include "AppLayer.h"
-#include "OverlayLayer.h"
 
 int main()
 {
 	Core::ApplicationSpecification appSpec;
-	appSpec.Name = "Architecture";
+	appSpec.Name = "MapMakerC++";
 	appSpec.WindowSpec.Width = 1920;
 	appSpec.WindowSpec.Height = 1080;
 
@@ -23,5 +22,3 @@ int main()
 	application.Run();
 }
 
-//application.PushLayer<AppLayer>();
-	//application.PushLayer<OverlayLayer>();

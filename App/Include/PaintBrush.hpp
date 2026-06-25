@@ -47,6 +47,8 @@ private:
 
 	void pickPaletteCell();
 
+	void bucketFill();
+
 private:
 
 	TileGrid& m_TileGrid;

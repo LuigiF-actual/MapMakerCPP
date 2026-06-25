@@ -23,9 +23,6 @@ public:
 private:
 	void OnEvent(Core::Event& event) override;
 
-	bool OnMouseButtonPressed(Core::MouseButtonPressedEvent& event);
-	bool OnMouseMoved(Core::MouseMovedEvent& event);
-	bool OnWindowClosed(Core::WindowClosedEvent& event);
 	bool OnKeyPressed(Core::KeyPressedEvent& event);
 
 	bool OnWindowResize(Core::WindowResizeEvent& event);

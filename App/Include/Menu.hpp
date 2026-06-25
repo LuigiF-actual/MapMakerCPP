@@ -13,22 +13,29 @@
 #include "AppLayer.h"
 #include "Config.hpp"
 
+
 enum class MenuAction : unsigned char
 {
 	NONE,
 	NEW_PROJECT,
 	OPEN_PROJECT,
-	SAVE_PROJECT
+	SAVE_PROJECT,
+	VIEW_HELP
 };
 
 
 struct NewProjectConfig
 {
-	std::string projectName = "**************";
+	std::string projectName = std::string(15, '\0');
 	int gridWidth = 1;
 	int gridHeight = 1;
 };
 
+/*=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+###############################################################################
+///////////////////////////////////////////////////////////////////////////////
+=============================================================================*/
 
 class NewProject_UI
 {
@@ -47,48 +54,70 @@ public:
 		int result = GuiWindowBox(m_WinBoxBody, "New Projects Config");
 		if (result == 0)
 		{
-			GuiLabel(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 30,m_WinBoxBody.width,120.0f }, "Project Name");
-			if (GuiTextBox(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 + 30,m_WinBoxBody.width,120.0f }, m_Config.projectName.data(), 15, m_VariableCMode) == 1) //Controls the name
+			GuiLabel(m_NameLabelRec, "Project Name");
+			if (GuiTextBox(m_NameInputRec, m_Config.projectName.data(), 15, m_VariableCMode) == 1)
 			{
 				m_VariableCMode = !m_VariableCMode;
 			}
 
-			GuiLabel(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 2 + 30,m_WinBoxBody.width,120.0f }, "Grid Width");
-			if (GuiValueBox(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 3 + 30,m_WinBoxBody.width,120.0f }, " ", &m_Config.gridWidth, 1, 1'000, m_VariableAMode) == 1) // width
+			GuiLabel(m_WidthLabelRec, "Grid Width");
+			if (GuiValueBox(m_WidthInputRec, " ", &m_Config.gridWidth, 1, 1'000, m_VariableAMode) == 1)
 			{
 				m_VariableAMode = !m_VariableAMode;
 			}
 
-			GuiLabel(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 4 + 30,m_WinBoxBody.width,120.0f }, "Grid Height");
-			if (GuiValueBox(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 5 + 30,m_WinBoxBody.width,120.0f }, " ", &m_Config.gridHeight, 1, 1'000, m_VariableBMode) == 1) //height
+			GuiLabel(m_HeightLabelRec, "Grid Height");
+			if (GuiValueBox(m_HeightInputRec, " ", &m_Config.gridHeight, 1, 1'000, m_VariableBMode) == 1)
 			{
 				m_VariableBMode = !m_VariableBMode;
 			}
 
-			if (GuiButton(Rectangle{ m_WinBoxBody.x,m_WinBoxBody.y + 120 * 6 + 30,m_WinBoxBody.width,120.0f }, "Send Form") == 1)
+			if (GuiButton(m_SubmitBtnRec, "Send Form") == 1)
 			{
 				if (!FilterSendForm())
 				{
 					ResetNewProjectConfig();
 				}
-				else {
+				else
+				{
 					SendNewProjectConfig();
 					m_SubmitNewProject = true;
 				}
 			}
-
 		}
-		else 
+		else
 		{
 			ResetNewProjectConfig();
 			m_MenuState = MenuAction::NONE;
 		}
+	
 	}
-
 	void Resize()
 	{
-		m_WinBoxBody.x = (static_cast<float>(GetScreenWidth()) / 2.0f) - m_WinBoxBody.width / 2.0f;
-		m_WinBoxBody.y = (static_cast<float>(GetScreenHeight()) * 5.0f / 100.0f);
+		m_WinBoxBody.width = static_cast<float>(GetScreenWidth()) * 0.30f;  
+		m_WinBoxBody.height = static_cast<float>(GetScreenHeight()) * 0.55f; 
+		m_WinBoxBody.x = (static_cast<float>(GetScreenWidth()) - m_WinBoxBody.width) / 2.0f;
+		m_WinBoxBody.y = (static_cast<float>(GetScreenHeight()) - m_WinBoxBody.height) / 2.0f;
+
+		float paddingX = m_WinBoxBody.width * 0.06f;       
+		float elementW = m_WinBoxBody.width - (paddingX * 2); 
+
+		float rowHeight = m_WinBoxBody.height / 9.0f;
+		float elementH = rowHeight * 0.65f;              
+
+		float startX = m_WinBoxBody.x + paddingX;
+		float startY = m_WinBoxBody.y + 35.0f; 
+
+		m_NameLabelRec = { startX, startY + (rowHeight * 0), elementW, elementH };
+		m_NameInputRec = { startX, startY + (rowHeight * 1), elementW, elementH };
+
+		m_WidthLabelRec = { startX, startY + (rowHeight * 2), elementW, elementH };
+		m_WidthInputRec = { startX, startY + (rowHeight * 3), elementW, elementH };
+
+		m_HeightLabelRec = { startX, startY + (rowHeight * 4), elementW, elementH };
+		m_HeightInputRec = { startX, startY + (rowHeight * 5), elementW, elementH };
+
+		m_SubmitBtnRec = { startX, startY + (rowHeight * 7), elementW, elementH }; 
 	}
 private:
 
@@ -129,19 +158,28 @@ private:
 	bool m_VariableAMode = false;
 	bool m_VariableBMode = false;
 	bool m_VariableCMode = false;
-
 	bool m_SendFormFailed = false;
 	bool& m_SubmitNewProject;
 
 	MenuAction& m_MenuState;
-
 	NewProjectConfig& m_Config;
-
-	Rectangle m_WinBoxBody = { static_cast<float>(GetScreenWidth()) / 2.0f - 440.0f,50.0f, 440.0f,880.0f };
-
 	std::regex m_Filter{ "[a-zA-Z][a-zA-Z0-9_]{1,15}" };
+
+	Rectangle m_WinBoxBody;
+	Rectangle m_NameLabelRec;
+	Rectangle m_NameInputRec;
+	Rectangle m_WidthLabelRec;
+	Rectangle m_WidthInputRec;
+	Rectangle m_HeightLabelRec;
+	Rectangle m_HeightInputRec;
+	Rectangle m_SubmitBtnRec;
 };
 
+/*=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+###############################################################################
+///////////////////////////////////////////////////////////////////////////////
+=============================================================================*/
 
 class OpenProject_UI
 {
@@ -203,9 +241,9 @@ public:
 
 private:
 
-	Rectangle m_WinBoxBody = { 400.0f, 100.0f, 500.0f, 500.0f };//{ GetScreenWidth() / 2.0f - 440.0f,50.0f, 440.0f,880.0f };
-	Rectangle m_PanelContent = { 0.0f, 0.0f, 500.0f, 0.0f };    // The total size of the inside area
-	Vector2 m_PanelScroll = { 0.0f, 0.0f };                       // Tracks X/Y scroll position
+	Rectangle m_WinBoxBody = { 400.0f, 100.0f, 500.0f, 500.0f };
+	Rectangle m_PanelContent = { 0.0f, 0.0f, 500.0f, 0.0f };    
+	Vector2 m_PanelScroll = { 0.0f, 0.0f };                       
 	Rectangle m_PanelView = { 0 };
 
 	MenuAction& m_MenuBtnState;
@@ -215,6 +253,12 @@ private:
 	std::vector<std::filesystem::path> m_SavePaths;
 };
 
+
+/*=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+###############################################################################
+///////////////////////////////////////////////////////////////////////////////
+=============================================================================*/
 
 class Menu
 {
@@ -245,6 +289,13 @@ public:
 			break;
 		case MenuAction::SAVE_PROJECT:
 			m_SubmitAction = true;
+			break;
+		case MenuAction::VIEW_HELP:
+			GuiLabel(m_helpTextBody, m_HelpText.c_str());
+			if (GuiLabelButton(Rectangle{ 10.0f,10.0f,100.0f,100.0f }, "Leave") == 1)
+			{
+				m_BtnState = MenuAction::NONE;
+			}
 			break;
 		}
 	}
@@ -277,6 +328,7 @@ public:
 		GuiSetStyle(DEFAULT, TEXT_SIZE, static_cast<int>(m_ButtonH * 25.0f / 100));
 		m_OpenProject.Resize();
 		m_NewProject.Resize();
+		m_helpTextBody = { GetScreenHeight() / 2.0f,15.0f,GetScreenHeight() / 2.0f, GetScreenHeight() / 2.0f };
 	}
 
 
@@ -317,16 +369,21 @@ private:
 			m_BtnState = MenuAction::SAVE_PROJECT;
 		}
 
+		if (GuiButton(Rectangle{ m_MarginLeft, m_MarginTop + (m_ButtonH * 3), m_ButtonW, m_ButtonH }, "#191#Help") == 1)
+		{
+			m_BtnState = MenuAction::VIEW_HELP;
+		}
+
 		GuiSetIconScale(1);
 
 	}
 
 private:
+
 	float m_MarginLeft = 0.0f;
 	float m_MarginTop = 0.0f;
 	float m_ButtonH = 0.0f;
 	float m_ButtonW = 0.0f;
-
 
 
 	MenuAction m_BtnState = MenuAction::NONE;
@@ -338,5 +395,17 @@ private:
 
 	NewProject_UI m_NewProject{ m_BtnState,m_NewProjectConfig,m_SubmitAction };
 	OpenProject_UI m_OpenProject{ m_BtnState,m_SubmitAction,m_PathToSave };
+
+	std::string m_HelpText = ("Press X to reset screen \n"
+		"ScrollMouse to zoom In,Out atlas view \n"
+		"Q,E to zoom In,Out world view \n"
+		"Press B for normal paint \n"
+		"Press U for rectangle too \n"
+		"Press T for bucket fill \n"
+		"Press K to open new atlas\n"
+		"Atlases **MUST** be 16x16 each tile");
+
+	Rectangle m_helpTextBody = { GetScreenHeight() / 2.0f,15.0f,GetScreenHeight() / 2.0f, GetScreenHeight() / 2.0f };
+		                     
 };
 

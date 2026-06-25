@@ -7,6 +7,7 @@
 
 #include "raylib.h"
 #include "Core/PopUpWarnings.hpp"
+#include "Config.hpp"
 
 class AtlasManager
 {
@@ -16,9 +17,6 @@ public:
         static AtlasManager atlas;
         return atlas;
     }
-
-    AtlasManager(const AtlasManager&) = delete; //avoid copying as if it were to be copied 2 instances could exist 
-    AtlasManager& operator=(const AtlasManager&) = delete;
 
     const Texture2D& getTexture(const std::string& name) const
     {
@@ -49,11 +47,11 @@ public:
     }
 
 private:
-    /* data */
+
     AtlasManager()
     {
 
-        std::filesystem::path TexturesDirPath = std::string(TEXTURES_PATH); //cool trick
+        std::filesystem::path TexturesDirPath = Config::getImagesDir();
 
         if (std::filesystem::is_directory(TexturesDirPath))
         {

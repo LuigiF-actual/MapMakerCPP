@@ -37,12 +37,10 @@ public:
         if (IsKeyPressed(KEY_E))
         {
             m_WorldCam.zoom = expf(logf(m_WorldCam.zoom) + Config::zoomSpd);
-            std::cout << m_WorldCam.zoom << "\n";
         }
         if (IsKeyPressed(KEY_Q))
         {
             m_WorldCam.zoom = expf(logf(m_WorldCam.zoom) - Config::zoomSpd);
-            std::cout << m_WorldCam.zoom << "\n";
         }
         if (IsKeyPressed(KEY_X))
         {

@@ -39,10 +39,16 @@ if(LINUX)
     endif()
 endif()
 
-find_program(CLANG_TIDY_EXE NAMES clang-tidy)
 
-if(CLANG_TIDY_EXE)
-    set_target_properties(App PROPERTIES
-        CXX_CLANG_TIDY "${CLANG_TIDY_EXE};--config-file=${CMAKE_SOURCE_DIR}/.clang-tidy;-p;${CMAKE_BINARY_DIR};--header-filter=.*(include|source).*"
-    )
+#For some reason my clang-tidy was conflicting with mingw
+if(NOT MINGW)
+    find_program(CLANG_TIDY_EXE NAMES clang-tidy)
+    if(CLANG_TIDY_EXE)
+        set(CMAKE_CXX_CLANG_TIDY 
+            "${CLANG_TIDY_EXE};--config-file=${CMAKE_SOURCE_DIR}/.clang-tidy;--header-filter=.*(include|source).*;--extra-arg-before=--driver-mode=g++"
+        )
+    endif()
+else()
+    message(STATUS "MinGW detected: Disabling Clang-Tidy to prevent toolchain mismatch.")
+    unset(CMAKE_CXX_CLANG_TIDY CACHE)
 endif()

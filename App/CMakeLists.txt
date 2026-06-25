@@ -59,3 +59,7 @@ set_source_files_properties(
     PROPERTIES
     COMPILE_OPTIONS "/analyze-"
 )
+
+if(MINGW)
+    target_link_libraries(App PRIVATE stdc++exp)
+endif()

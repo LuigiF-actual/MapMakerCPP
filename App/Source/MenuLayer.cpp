@@ -36,7 +36,6 @@ void MenuLayer::OnUpdate()
 
 			break;
 		}
-		//hi whats wrong hre i think its the vector reference? No code pls. 
 		case MenuAction::SAVE_PROJECT:
 		{
 			auto* appLayer = Core::Application::Get().GetLayer<AppLayer>();
@@ -68,7 +67,6 @@ bool MenuLayer::OnKeyPressed(Core::KeyPressedEvent& event)
 	{
 		if (event.GetKeyCode() == KEY_ESCAPE)
 		{
-			std::println("Im here!");
 			Core::Application::Get().SwitchLayer<AppLayer>();
 			return true;
 		}

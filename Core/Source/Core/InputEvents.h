@@ -6,26 +6,6 @@
 
 namespace Core {
 
-	//
-	// Key Events
-	//
-	/*
-	
-	enum class EventType
-	{
-		None = 0,
-		WindowClose, WindowResize,
-		KeyPressed, KeyReleased,
-		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
-	};
-
-
-	#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; }\
-								virtual EventType GetEventType() const override { return GetStaticType(); }\
-								virtual const char* GetName() const override { return #type; }
-	
-	*/
-
 	// Changed from macro to explicit function calls, because it was hard to understand
 
 	class KeyEvent : public Event

@@ -30,6 +30,7 @@ FetchContent_MakeAvailable(raygui)
 FetchContent_Declare(
     tinyfiledialogs
     GIT_REPOSITORY "https://git.code.sf.net/p/tinyfiledialogs/code"
+    SYSTEM
 )
 
 FetchContent_MakeAvailable(tinyfiledialogs)
@@ -38,6 +39,7 @@ FetchContent_Declare(
     sqlite3
     URL "https://sqlite.org/2026/sqlite-amalgamation-3530100.zip"
     URL_HASH SHA3_256=3c07136e4f6b5dd0c395be86455014039597bc65b6851f7111e88f71b6e06114
+    SYSTEM
 )
 FetchContent_MakeAvailable(sqlite3)
 
@@ -66,14 +68,17 @@ add_library(sqlite3_lib)
 target_sources(sqlite3_lib
     PRIVATE 
         ${sqlite3_SOURCE_DIR}/sqlite3.c 
-        ${sqlite3_SOURCE_DIR}/shell.c 
-
     PUBLIC 
     FILE_SET HEADERS 
     FILES 
         ${sqlite3_SOURCE_DIR}/sqlite3.h 
         ${sqlite3_SOURCE_DIR}/sqlite3ext.h 
 
+)
+
+set_target_properties(sqlite3_lib PROPERTIES
+    C_CLANG_TIDY ""
+    CXX_CLANG_TIDY ""
 )
 
 file(REMOVE_RECURSE ${raylib_SOURCE_DIR}/examples)
